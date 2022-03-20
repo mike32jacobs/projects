@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+    <title>Assignment #3 Task #2: BlackJack</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style type="" text/css">
+        h2{
+            text-align: center; 
+            font-size: 30px;
+        }
+        img { 
+            object-fit: contain;
+            display: block;
+            width: 150px;
+        }
+
+        .gameboard{
+            border: 1px solid#000;
+            padding: 10px;
+            text-align: center;
+            width: 80%;
+            margin: 0 auto;
+        }
+        .card-container{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            /* background-color: DodgerBlue; */
+            /* width:80%; */
+            margin: 0 auto;
+        }
+        .card-container > div {
+            margin: 10px;
+            text-align: center;
+
+        }
+        hands-container{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            /* background-color: DodgerBlue; */
+            width:80%;
+            margin: 0 auto;
+        }
+        .hands-container > div {
+            margin: 10px;
+            text-align: center;
+            width:80%;
+            margin: 0 auto;
+
+
+
+        }
+
+        .h-title{
+            font-size: 40px;
+            font-weight: 700; 
+            color: #fff;
+            padding: 5px;
+
+        }
+        .h-total{
+            font-size: 40px;
+            font-weight: 700; 
+            box-sizing: border-box; 
+            color: #fff;
+            /* background-color:dodgerblue; */
+            padding: 5px;
+
+
+        }
+        .hand-container {
+            display: grid;
+            gap: 2px;
+            grid-template-rows: 1fr 4fr 1fr;
+            /* background-color: rgb(87, 14, 223); */
+            padding: 5px;
+        }
+
+        .hand-container>div {
+            /* background-color: #fff; */
+            text-align: center;
+            padding: 5px 5px 5px 5px;
+        }
+        /* .hand-container{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            border: 3px solid#000;;
+            border:5px;
+            background-color: rgb(243, 69, 26);
+            padding: 5px;
+        } */
+        .hand-container.dealer{
+            background-color: rgb(255, 113, 30);
+        }
+        .hand-container.player{
+            background-color:dodgerblue;
+        }
+        .move{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            background-color: DodgerBlue;
+            /* width:80%; */
+            margin: 0 auto;
+        }
+        .move > div {
+            border: 1px solid#000;
+            padding: 10px;
+            font-size: 30px;
+            color: white;
+            text-align: center;
+            width: 20%;
+            margin: 0 auto;
+
+        }
+        .move > div:hover {
+            background-color: rgba(210, 215, 221, 0.883);
+
+        }
+        .result{
+            background-color: #428DC6;
+            padding: 12px 7px 7px 7px; 
+            margin: 4px 5px; 
+            display: inline-block; 
+            font-size: 40px;
+            font-weight: 700; 
+            box-sizing: border-box; 
+            color: #fff;
+        }
+        /* .new-game-btn{
+            display: inline-block; 
+            font-size: 40px;
+            font-weight: 700; 
+            box-sizing: border-box; 
+            color: rgb(17, 17, 17);
+        } */
+        /* .not-shown {
+        
+            background: url(/images/PNG-cards-1.3/back.png) no-repeat;
+            
+        }
+     */
+    </style>
+    <script language="javascript">
+        var winner = null;
+        var gameOver = false;
+        var bet = 25;
+
+        class Card {
+            constructor(name, value, suit) {
+                this.name = name;
+                this.value = value;
+                this.suit = suit;
+
+            }
+
+            makeDivTag() {
+
+                let idString = (this.name + "-of-" + this.suit);
+                let imgTag = this.makeImgTag();
+                let divString = ('<div class="card" id="' + idString + '">' + imgTag + '</div>');
+                return divString;
+            }
+            makeImgTag() {
+                // use the name, value, and suit to return the <img > to display the card
+
+                let srcPathStr = ('"/images/SVG-cards-1.3/' + this.name + "_of_" + this.suit + '.svg"');
+                let altTextStr = ('"' + this.name + " of " + this.suit + '"');
+                let imgTagStr = ('<img src=' + srcPathStr + ' ' + 'alt=' + altTextStr + '>');
+
+                return imgTagStr
+            }
+            // hide() {
+            //     this.quantity++;
+            // }
+            // show() {
+            //     this.quantity--;
+            // }
+        }
+        class Deck {
+            constructor() {
+                this.name = "myDeck";
+                this.cards = [];
+
+                //Build a deck from scratch
+                // Dynamically create a deck of cards using a multidimensional array.
+                let cardNames = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'];
+                let cardValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11];
+                let cardSuits = ['hearts', 'spades', 'diamonds', 'clubs'];
+
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 13; j++) {
+                        // Make a card
+                        let c = new Card(cardNames[j], cardValues[j], cardSuits[i]);
+                        // add it to deck
+                        this.cards.push(c);
+                    }
+                }
+
+            }
+            showDeck() {
+                // This is not a function needed for gameplay. It helped me debug the constructor function and the shuffle deck function
+                for (let i = 0; i < this.cards.length; i++) {
+                    console.log(this.cards[i].name + " of " + this.cards[i].suit);
+                }
+                return;
+
+            }
+            shuffleDeck() {
+
+                // I am going to try the Fisher-Yates algorithm which I found here: https://dev.to/codebubb/how-to-shuffle-an-array-in-javascript-2ikj
+                for (let i = this.cards.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    const temp = this.cards[i];
+                    this.cards[i] = this.cards[j];
+                    this.cards[j] = temp;
+                }
+
+            }
+            deal(player, numCards = 1) {
+                for (let i = 0; i < numCards; i++) {
+                    let drawCard = this.cards.shift();
+                    player.hand.push(drawCard);
+                }
+            }
+
+        }
+        class Player {
+            constructor(name, walletValue = 0) {
+                this.name = name;
+                this.walletValue = walletValue;
+                this.hand = [];
+            }
+            totalHand() {
+                var total = 0; //initialize the total to zero
+                var aces = 0
+                // Loop through the hand, and add the value of each card
+                for (let i = 0; i < this.hand.length; i++) {
+                    total = total + this.hand[i].value;
+                    if (this.hand[i].name == "ace") {
+                        aces++
+                    }
+                }
+                // if the total is greater than 21, check to see if there were any aces in the hand. Those could have a value of 1 instead of 11. Change the value to see if the total is less than 21.
+
+                // Note to professor: There must be a better way to do this. I want to do a loop until the total is less than 21 or there are no aces. Essentially, I want to subtract 10, or 20, or 30, or 40. I could use a case statement. The good news is this works as intended.
+
+                if ((total > 21) && (aces > 0)) {
+                    total = total - 10;
+                    if ((total > 21) && (aces > 1)) {
+                        total = total - 10;
+                        if ((total > 21) && (aces > 2)) {
+                            total = total - 10;
+                            if ((total > 21) && (aces > 3)) {
+                                total = total - 10;
+                            }
+                        }
+                    }
+                }
+                return total;
+
+            }
+
+            showHand() {
+                // This is not a function needed for gameplay. It helped me debug the constructor function and the shuffle deck function
+                for (let i = 0; i < this.hand.length; i++) {
+                    console.log(this.hand[i].name + " of " + this.hand[i].suit);
+                }
+
+            }
+            displayCards() {
+                let cardContainerId = this.name + "-cards";
+                let cardContainerDiv = document.getElementById(cardContainerId);
+
+                //remove the previously displayed cards
+                cardContainerDiv.innerHTML = "";
+
+                // If the player is the dealer, insert a card div for a hidden card
+                if (this.name == "dealer") {
+                    cardContainerDiv.innerHTML = '<div class="card" id="hidden-card" style="display: none;"><img src="/images/PNG-cards-1.3/back.png" alt="This card is hidden"></div>';
+                }
+
+                // Loop through the cards in the player's hand and build a div to display each card. Place the div in the appropriate card container
+                for (let i = 0; i < this.hand.length; i++) {
+                    cardContainerDiv.innerHTML += this.hand[i].makeDivTag();
+
+                }
+
+            }
+            displayTotal() {
+                let total = this.totalHand();
+
+                // Append that total to the inner html of the appropriate div
+                let totalDivId = ("total-" + this.name);
+                let totalDiv = document.getElementById(totalDivId);
+                totalDiv.innerHTML = ("Total: " + total);
+
+            }
+
+            displayWalletValue() {
+                let walletTotal = this.walletValue;
+
+                // Append that total to the inner html of the appropriate div
+                let walletDivId = ("wallet-" + this.name);
+                let walletAmountDiv = document.getElementById(walletDivId);
+                walletAmountDiv.innerHTML = ("You have $" + walletTotal + " in your wallet.");
+            }
+
+        }
+        class Game {
+            constructor(name, player, dealer, deck) {
+                this.name = name;
+                this.player = player;
+                this.dealer = dealer;
+                this.deck = deck;
+                this.winner = null;
+                this.bet = 0;
+                this.gameOver = false;
+            }
+            startGame() {
+                this.deck.shuffleDeck();
+                this.deck.deal(this.player, 2);
+                this.deck.deal(this.dealer, 2);
+                this.displayItems();
+                this.checkBlackJack();
+            }
+            newGame() {
+                // This method will clear the game data, but keep the players and the wallet value.
+                //reset game deck, winner, but, and game over
+                this.deck = new Deck;
+                this.winner = null;
+                this.bet = 0;
+                this.gameOver = false;
+
+                // Reset player hand
+                this.player.hand = [];
+                // Reset dealer hand
+                this.dealer.hand = [];
+                // Hide the winning message and new game button
+                this.displayWinner();
+                // Start the game over
+                this.startGame();
+
+            }
+            hideDealerCard() {
+                if (gameOver) {
+                    // display all cards
+                    this.dealer.displayCards;
+                } else {
+                    // The game is still going on. Hide the dealer's first card.
+                    // Determine the dealer's first card, hide that div
+                    let firstCard = this.dealer.hand[0];
+                    let idString = (firstCard.name + "-of-" + firstCard.suit);
+                    let firstCardDiv = document.getElementById(idString);
+                    firstCardDiv.style.display = 'none';
+
+                    // Show the back of the card
+                    let cardBack = document.getElementById("hidden-card");
+                    cardBack.style.display = 'inline-block';
+
+                    //Hide the dealer's total from the player
+                    let totalDiv = document.getElementById("total-dealer");
+                    totalDiv.innerHTML = "Total: ?";
+
+                }
+            }
+            displayItems() {
+                // Display cards, totals, wallet, moves, and bet form for player
+                this.player.displayCards();
+                this.player.displayTotal();
+                this.player.displayWalletValue();
+                this.displayMoves();
+                this.displaySubmitBetInputs();
+                this.displayBet();
+
+                // Display the cards and the total for the dealer
+                this.dealer.displayCards();
+                this.dealer.displayTotal();
+
+                // If the game is not over, then hide the dealer's first card and total
+                if (this.gameOver == false) {
+                    this.hideDealerCard();
+                }
+            }
+            dealerTurn() {
+                // Hide the move options for player
+                let movesDiv = document.getElementById("player-turn-container");
+                movesDiv.style.display = 'none';
+
+                // Hide the form, so the player cannot bet.
+                let formDiv = document.getElementById("formDiv");
+                formDiv.style.display = 'none';
+
+                // Dealer must hit on anything less than 17
+                let dealerTotal = this.dealer.totalHand();
+                while (dealerTotal < 17) {
+                    this.hit(this.dealer);
+                    dealerTotal = this.dealer.totalHand();
+                }
+                this.checkWinner();
+            }
+            checkWinner() {
+                let p1Score = this.player.totalHand();
+                let dealerScore = this.dealer.totalHand();
+                let message = "Default Message"
+                if (dealerScore > 21) {
+
+                    // Dealer Busts.
+                    this.winner = this.player;
+                    this.gameOver = true;
+                    message = ("Dealer Busts. The winner is " + this.winner.name + ". They won $" + this.bet + ".");
+
+                } else if ((p1Score > dealerScore) && (p1Score < 22)) {
+                    // Nobody busts. player beats dealer
+                    this.winner = this.player;
+                    this.gameOver = true;
+                    message = ("The winner is " + this.winner.name + ". They won $" + this.bet + ".");
+
+                } else if ((dealerScore > p1Score) && (dealerScore < 22)) {
+                    // Nobody busts. dealer beats player
+                    this.winner = this.dealer;
+                    this.gameOver = true;
+                    message = ("The winner is the dealer. " + this.player.name + " lost $" + this.bet + " on the hand.");
+
+
+                } else if ((p1Score == dealerScore) && (p1Score < 22)) {
+                    // nobody busts and the score is tied. Player gets the win.
+                    this.winner = this.player;
+                    this.gameOver = true;
+                    message = ("Tied Score: The dealer loses ties. The winner is " + this.winner.name + ". They won $" + this.bet + ".");
+
+                } else {
+                    // The only option left is the player busted before the dealer went
+                    this.winner = this.dealer;
+                    this.gameOver = true;
+                    message = ("The player went bust before the dealer had a turn. The winner is the dealer. " + this.player.name + " lost $" + this.bet + " on the hand.");
+
+                }
+                //pay the bets
+                this.payBet();
+                // this.player.displayWalletValue();
+                this.displayItems();
+
+                // Hide the move options for p1
+                let movesDiv = document.getElementById("player-turn-container");
+                movesDiv.style.display = 'none';
+                this.displayWinner(message);
+
+                // Hide the form, so the player cannot bet.
+                let formDiv = document.getElementById("formDiv");
+                formDiv.style.display = 'none';
+
+            }
+            displayMoves() {
+
+                // This function will display the Hit Button and the Stay button, and place them in the appropriate position on the dom
+                let hitBtn = this.makeHitBtn();
+                let stayBtn = this.makeStayBtn();
+
+                let movesDiv = document.getElementById("player-turn-container");
+                movesDiv.innerHTML = (stayBtn + hitBtn);
+
+                // make sure it is displayed.
+                movesDiv.style.display = 'inline-block';
+
+            }
+            displaySubmitBetInputs() {
+                // This function will display the button which will call the submit bet method, and place that button in the appropriate position in the dom.
+
+                // Firs, show the form
+                let formDiv = document.getElementById("formDiv");
+                formDiv.style.display = 'inline-block';
+
+                let submitBetInputsStr = this.makeSubmitBetInputs();
+
+                // Now place that in the dom
+                let formLabel = document.getElementById("form-label");
+                formLabel.innerHTML = submitBetInputsStr;
+
+            }
+            displayWinner(message = "") {
+                // Check to see if there is a winner
+                let messageDiv = document.getElementById("result");
+                messageDiv.innerHTML = message;
+
+                //Display a play again button
+                let btnDiv = document.getElementById("new-game")
+                let newGameBtn = this.makeNewGameBtn();
+                btnDiv.innerHTML = newGameBtn;
+
+                if (this.winner == null) {
+                    // No winner. Hide the winner display
+                    messageDiv.style.display = 'none';
+                    btnDiv.style.display = 'none';
+
+                } else {
+                    // There is a winner. show the winner message and new game button.
+                    messageDiv.style.display = 'inline-block';
+
+                    btnDiv.style.display = 'inline-block';
+
+                }
+
+            }
+            checkBlackJack() {
+                // The purpose of this function is to see if the player or the dealer was initially dealt black jack. If so, end the game and check the winner.
+
+                // Hide the move options for p1
+                let movesDiv = document.getElementById("player-turn-container");
+                movesDiv.style.display = 'inline-block';
+                if ((player.totalHand() == 21) || (dealer.totalHand() == 21)) {
+                    // someone was dealt blackjack. Check the winner
+                    this.checkWinner();
+
+                    // Hide the move options for p1
+                    let movesDiv = document.getElementById("player-turn-container");
+                    movesDiv.style.display = 'none';
+                }
+            }
+            makeHitBtn() {
+
+                let gameName = (this.name);
+                let playerName = this.player.name;
+                let btnString = ('<button type="button" onclick="' + gameName + '.hit(' + playerName + ')">Hit</button>');
+                return btnString;
+            }
+            makeStayBtn() {
+
+                let gameName = (this.name);
+                let btnString = ('<button type="button" onclick="' + gameName + '.dealerTurn()">Stay</button>');
+                return btnString;
+            }
+            makeNewGameBtn() {
+
+                let gameName = (this.name);
+                let btnString = ('<button type="button" onclick="' + gameName + '.newGame()">New Game</button>');
+
+                return btnString;
+            }
+            makeSubmitBetInputs() {
+                //This function will create a string for two inputs which will be placed in the form. THe first input is a number input, sn the second input is a submit button
+                let max = this.player.walletValue;
+
+                let gameName = (this.name);
+                let numInputString = ('<input type="number" id="amount" name="amount" min="0" max="' + max + '">');
+
+                let btnInputString = ('<input class="button" name="submit" type="submit" value="submit" onclick="' + gameName + '.placeBet()" />');
+
+                return (numInputString + btnInputString);
+
+                // <input class="button" name="submit" type="submit" value="submit" onclick="(testGame.bet())" />
+
+            }
+            hit(player) {
+                this.deck.deal(player);
+                this.displayItems();
+
+                // Check to see if the hand total is greater than 21.
+                if (player.totalHand() > 21) {
+                    // if the player busts, then it is time to check the winner
+                    this.checkWinner();
+                }
+
+            }
+            // bet(){
+            //     this.bet = 
+            // }
+            stay() {
+                alert("Now it is the dealer's turn");
+                dealerTurn();
+            }
+            placeBet() {
+                let amount = document.getElementById("amount").value;
+
+                if (amount <= this.player.walletValue) {
+                    // If the bet is not too big, then update the bet and the wallet value of the player
+                    this.bet = amount;
+
+                    this.player.walletValue = (this.player.walletValue - this.bet);
+
+
+                } else {
+                    alert("That bet is too big. You must wager an amount less than or equal to " + this.player.walletValue);
+                }
+                this.displayItems();
+            }
+            displayBet() {
+
+
+
+                // Append that total to the inner html of the appropriate div
+                let betAmountDiv = document.getElementById("bet");
+                betAmountDiv.innerHTML = ("Your bet for this game is $" + this.bet + ". ");
+
+            }
+            payBet() {
+                if (this.winner == this.player) {
+                    // Place their bet and their winnings back into the wallet
+
+                    this.player.walletValue = (this.player.walletValue + (2 * this.bet));
+                }
+                return;
+            }
+        }
+
+    </script>
+
+
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <div class="jumbotron">
+            <h1 class="title"> BlackJack</h1>
+            <p>Assignment #3 Task #2: By Michael Jacobs</p>
+            <p>THIS IS VERSION 2: I am writing a Game class.</p>
+
+        </div>
+    </div>
+    <div class="gameboard">
+        <div class="hands-container">
+            <div class="hand-container dealer">
+                <div class="h-title h-dealer" id="title-dealer">Dealer Hand</div>
+                <div class="card-container" id="dealer-cards">
+                </div> <!-- end card container -->
+                <div class="h-total" id="total-dealer"></div>
+            </div><!-- end hand container -->
+
+            <div class="hand-container player">
+                <div class="h-title h-player" id="title-player">Player Hand</div>
+                <div class="card-container" id="player-cards">
+
+                </div><!-- end card container -->
+                <div class="h-total" id="total-player"></div>
+            </div><!-- end hand container -->
+        </div><!-- end hands container -->
+        <div class="move" id="player-turn-container">
+        </div> <!-- end move container -->
+        <div class=wallet-container>
+            <div class="bet" id="bet">Bet</div>
+            <div id="formDiv">
+                <form>
+                    <label id="form-label" for="amount">Enter the amount you would like to bet:</label>
+
+                </form>
+            </div>
+
+            <div class="wallet-amount" id="wallet-player"></div>
+        </div><!-- end wallet container -->
+        <div class="results-container">
+            <div class="result" id="result" style="display:none">
+            </div>
+            <div class="btnContainer" id="new-game" style="display:none"></div>
+        </div><!-- end results-container -->
+    </div><!-- end gameboard -->
+
+    <script language="javascript">
+        deck = new Deck();
+        deck.shuffleDeck();
+        dealer = new Player("dealer");
+        player = new Player("player", 100);
+        testGame = new Game("testGame", player, dealer, deck);
+        testGame.startGame();
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
