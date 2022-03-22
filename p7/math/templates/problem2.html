@@ -1,0 +1,33 @@
+{% extends "layout2.html" %}
+
+{% block title %}
+    Problem 1: Math Symbols
+{% endblock %}
+
+{% block probTitle %}
+  Copying and Pasting Images Into an LMS
+{% endblock %}
+{% block probDescript %}
+  <p>I use the free curriculum made available by Illustrative Mathematics. When
+    I copy content from Illustrative Math and paste it into Canvas, it does not
+    all copy, so I need to play around edit in the WYSIWYG and/or the HTML editor.
+    There is a lot of code in the HTML version. Sometimes it is very difficult
+    to understand what I just copied. Sometimes I make it look how I want it, and
+    think that I have been successful. Unfortunately I later discover that the images
+    do not show up for students. They are replaced with a picture of a padlock.
+  </p>
+  <p><img id="problem screenshot"src="/static/Images Don't Display.png" alt="Screen shot of Canvas LMS page on which the images have been replaced by images of padlocks" width="100%"></p>
+{% endblock %}
+
+{% block probVideo %}<iframe width="100%" src="https://www.youtube.com/embed/9jQPep7n2Zk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>{% endblock %}
+
+{% block solution %}<p>LaTex allows you to use this symbol.</p>{% endblock %}
+
+{% block narrative %}
+  <p>The reason the lock shows up for students is because their
+  browsers do not have access to the images. The images are only stored on your computer.
+  You can test this by using a different device to access the page, or you can simply use a
+  different browser.
+  </p>
+
+{% endblock %}

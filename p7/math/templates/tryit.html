@@ -1,0 +1,109 @@
+{% extends "layout3.html" %}
+
+{% block head %}
+    <!-- include tinyMCE editor -->
+        <script src="https://cdn.tiny.cloud/1/9bpjvognkk3do6iyugnzha1oi8yhhkcniguan423vhs8bar0/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- TinyMCE plugin library.-->
+        <script src='tinymce/tinymce.min.js'></script>
+
+    <!-- Tiny MCE set up-->
+      <script type="text/javascript">
+      tinymce.init({
+        selector: '#myTextarea',
+        width: 600,
+        height: 300,
+        plugins: [
+          'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+          'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+          'table emoticons template paste help'
+        ],
+        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+          'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+          'forecolor backcolor emoticons | help',
+        menu: {
+          favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+        },
+        menubar: 'favs file edit view insert format tools table help',
+        content_css: 'css/content.css'
+      });
+      </script>
+
+{% endblock %}
+
+{% block title %}
+    Try It
+{% endblock %}
+
+{% block content %}
+  <h1>Try It Yourself</h1>
+  <h2>Enter LaTex or mathml into the tinymce editor below and see the result.</h2>
+  <p>
+    <!-- Page Features-->
+            <div class="row text-center">
+                <div class="col-lg-6 col-md-6 mb-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">LaTex</h4>
+                            <p class="card-text"> \[x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\].
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 mb-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Mathml</h4>
+                            <p class="card-text">
+                            <math xmlns = "http://www.w3.org/1998/Math/MathML">
+                              <mrow>
+                                <mi>x</mi> <mo>=</mo>
+                                <mfrac>
+                                  <mrow>
+                                    <mrow><mo>-</mo><mi>b</mi></mrow>
+                                    <mo>&PlusMinus;</mo>
+                                    <msqrt>
+                                      <mrow>
+                                        <msup><mi>b</mi><mn>2</mn></msup>
+                                        <mo>-</mo>
+                                        <mrow>
+                                          <mn>4</mn><mo>&InvisibleTimes;</mo>
+                                          <mi>a</mi><mo>&InvisibleTimes;</mo>
+                                          <mi>c</mi>
+                                        </mrow>
+                                      </mrow>
+                                    </msqrt>
+                                  </mrow>
+                                  <mrow>
+                                    <mn>2</mn><mo>&InvisibleTimes;</mo>
+                                    <mi>a</mi>
+                                  </mrow>
+                                </mfrac>
+                              </mrow>
+                              </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+  </p>
+    <form action="/tryit" method="post">
+        <textarea id="mytextarea" name="mytextarea">{{ userhtml }}</textarea>
+        <input type="submit" value="Submit"/>
+    </form>
+
+
+    <div class="jumbotron">
+        <p class="lead">The text below is the code you entered</p>
+        <hr class="my-4">
+        {{ userhtml }}
+        <p class="lead">This is how that code will be displayed</p>
+        <hr class="my-4">
+        {{ userhtml|safe }}
+    </div>
+
+{% endblock %}
+
+</html>

@@ -1,0 +1,117 @@
+{% extends "layout2.html" %}
+
+{% block title %}
+    Problem 1: Math Symbols
+{% endblock %}
+
+{% block probTitle %}
+  Math Symbols
+{% endblock %}
+{% block probDescript %}
+  <p>Math symbols don't always display as expected</p>
+
+  <p>Any teacher who needs to use images of symbols throughout the content of
+    of their lessons has likely encountered an issue with symbols. Some math
+    equation editors are better than others. Undoubtedly, math teachers have
+    experienced the frustration of trying to make some math equation or image
+    appear how they want it. One example is the brackets which are used to wrap
+    a system of equations.
+  </p>
+  <p><math xmlns="http://www.w3.org/1998/Math/MathML">
+        <semantics>
+            <mrow>
+                <mo>{</mo>
+                <mtable columnalign="left left" rowspacing=".2em" columnspacing="1em" displaystyle="false">
+                    <mtr>
+                        <mtd>
+                            <mtable columnalign="right left right left right left right left right left right left" rowspacing="3pt" columnspacing="0em 2em 0em 2em 0em 2em 0em 2em 0em 2em 0em" displaystyle="true">
+                                <mtr>
+                                    <mtd>
+                                        <mn>4</mn>
+                                        <mi>x</mi>
+                                        <mo>+</mo>
+                                        <mn>8</mn>
+                                        <mi>y</mi>
+                                    </mtd>
+                                    <mtd>
+                                        <mi></mi>
+                                        <mo>=</mo>
+                                        <mn>15</mn>
+                                    </mtd>
+                                </mtr>
+                                <mtr>
+                                    <mtd>
+                                        <mi>x</mi>
+                                        <mo>+</mo>
+                                        <mspace></mspace>
+                                        <mi>y</mi>
+                                    </mtd>
+                                    <mtd>
+                                        <mi></mi>
+                                        <mo>=</mo>
+                                        <mn>2</mn>
+                                    </mtd>
+                                </mtr>
+                            </mtable>
+                        </mtd>
+                    </mtr>
+                </mtable>
+                <mo fence="true" stretchy="true" symmetric="true"></mo>
+            </mrow>
+            <annotation encoding="application/x-tex">\begin{cases}\begin {align} 4x + 8y &amp;= 15\\ x+ \hspace{2mm}y&amp;=2 \end{align} \end{cases}</annotation>
+        </semantics>
+    </math></p>
+    <p>
+        <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+          <mi>x</mi>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <mo>&#x2212;<!-- − --></mo>
+              <mi>b</mi>
+              <mo>&#x00B1;<!-- ± --></mo>
+              <msqrt>
+                <msup>
+                  <mi>b</mi>
+                  <mn>2</mn>
+                </msup>
+                <mo>&#x2212;<!-- − --></mo>
+                <mn>4</mn>
+                <mi>a</mi>
+                <mi>c</mi>
+              </msqrt>
+            </mrow>
+            <mrow>
+              <mn>2</mn>
+              <mi>a</mi>
+            </mrow>
+          </mfrac>
+        </math>
+    </p>
+{% endblock %}
+
+{% block probVideo %}<iframe width="560" height="315" src="https://www.youtube.com/embed/ZZDZ-6U4kJI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>{% endblock %}
+
+{% block solution %}<p>There are a few possible solutions to this problem, but each has it's costs.
+  </p>
+  <ul id="solutions">
+    <li> Use LaTex to generate the equations. There are a number of equation editors available on the web.
+        Not all of them have all of the features a teacher might need. Editing laTex is a skill that math
+        teachers should add to their toolbox.</li>
+    <li> Use mathml in your html code. It is a markup language designed for use with mathematical languge.
+        The goal of <a href="https://www.w3.org/TR/MathML3/">MathML</a> is to "enable mathematics to be served, received,
+        and processed on the World Wide Web, just as HTML has enabled this functionality for text." </li>
+    <li> Use images. You can take a screenshot of the system of equations.
+        This will work, but if you do it frequently, it could be a time consuming process.
+        A look at <a href="/problem2">Problem 2</a> will show you how to take a screenshot, and then upload a
+        desription into the Canvas LMS. Making the image accessible is important, but also
+        time-consuming</li>
+    <li> Use Mathjax to do this for you. This is a very effective solution, but it requires a basic knowledge
+          of html, and javascript. Althouth the solution is effective, it is not reasonable to expect that all
+          math teachers will be willing and able to add this to their tool box.</li>
+  </ul>{% endblock %}
+
+{% block narrative %}<p>There are problems with using the LaTex generator. One
+issue is that it downloads this as an image. This could be a problem because screen
+readers will not be able to read the equation without some foresight from the
+teacher. </p>{% endblock %}

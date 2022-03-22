@@ -1,0 +1,45 @@
+{% extends "layout4.html" %}
+
+
+{% block title %}
+     Math Symbols
+{% endblock %}
+
+
+
+{% block conceptTitle %}
+    mathjax
+{% endblock %}
+
+{% block conceptDescript %}
+    <p><img src="/static/mathjaxlogo.png" alt="Logo for Mathjax"></p>
+    <p>MathJax .
+    <a href="https://www.mathjax.org/">MathJax</a> describes their product as a
+    JavaScript display engine for mathematics that works in all browsers. No
+    more setup for readers. It just works."</p>
+
+{% endblock %}
+{% block conceptVideo %}<iframe width="560" height="315" src="https://www.youtube.com/embed/2JO5M4F_MVc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>{% endblock %}
+{% block uses %}
+When combined with LaTex and Mathml, math teachers, can use MathJax to display all sorts of
+mathematical notations. One of the major advantages is that the math created by mathjax is
+searchable, and can be read by a screen reader. This makes it much easier for teachers to
+create accessible content. <p>Another major advantage over other options is that when the user
+zooms in on mathjax rendered content, it stays crisp. </p><p> Look at the mathjax version of
+the quadratic formula, and compare it to the LaTex generated image of the same formula. Try zooming
+in on the text, and try copying and pasting the text.</p>
+<ul>
+    <li><img src="/static/CodeCogsEqn.gif" alt="Quadratic Formula image generated with LaTex" /></li>
+    <li>\[x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\]</li>
+</ul>
+
+{% endblock %}
+{% block narrative %}
+Math Jax requires a bit of setup if you are a web designer, but it is automatically included
+in the Canvas LMS. It allows you to take any equation and render either the mathml, or the
+LaTex version of the code.
+
+{% endblock %}
+{% block concept %}
+
+{% endblock %}

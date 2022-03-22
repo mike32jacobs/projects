@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <!-- include tinyMCE editor -->
+        <script src="https://cdn.tiny.cloud/1/9bpjvognkk3do6iyugnzha1oi8yhhkcniguan423vhs8bar0/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- TinyMCE plugin library.-->
+        <script src='tinymce/tinymce.min.js'></script>
+
+    <!-- Take the content from the textarea and pass it to an html page.-->
+        <script>
+            tinymce.init({
+                selector: "#mytextarea"
+
+            });
+        </script>
+
+{% endblock %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    <form action="/tiny2" method="post">
+        <textarea id="mytextarea" name="mytextarea">{{ userhtml }}</textarea>
+        <input type="submit" value="Submit"/>
+    </form>
+
+
+    <div class="jumbotron">
+        <p class="lead">The text below is the code you entered</p>
+        <hr class="my-4">
+        {{ userhtml|safe }}
+    </div>
+
+{% endblock %}
+
+</html>

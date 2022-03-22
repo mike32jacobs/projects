@@ -1,0 +1,17 @@
+{% extends "layout3.html" %}
+
+{% block title %}
+    Layout 4
+{% endblock %}
+
+
+{% block content %}
+    <div class="main" id="main">
+      <h1 class="concept title" id="concept title">Concept Name: {% block conceptTitle %}{% endblock %}</h1>
+      <h3 class="concept description" id="concept description">Concept Description </h3>{% block conceptDescript %}{% endblock %}
+      <h3 class="concept video" id="concept video">Concept Video </h3>{% block conceptVideo %}{% endblock %}
+      <h3 class="concept uses" id="concept uses">Potential Uses </h3>{% block uses %}{% endblock %}
+      <h3 class="narrative" id="narrative">Takeaways </h3>{% block narrative %}{% endblock %}
+    </div>
+    {% block morecontent %}{% endblock %}
+{% endblock %}

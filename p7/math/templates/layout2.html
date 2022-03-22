@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Layout 2
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+
+        <div class="sidenav">
+          <a href="/problem1">Problem 1</a>
+          <a href="/problem2">Problem 2</a>
+          <a href="/problem3">Problem 3</a>
+        </div>
+
+        <div class="main" id="main">
+          <h1 class="problem title" id="problem title">Problem Name: {% block probTitle %}{% endblock %}</h1>
+          <h3 class="problem description" id="problem description">Problem Description </h3>{% block probDescript %}{% endblock %}
+          <h3 class="problem video" id="problem video">Problem Video </h3>{% block probVideo %}{% endblock %}
+          <h3 class="problem solution" id="problem solution">Potential Solution </h3>{% block solution %}{% endblock %}
+          <h3 class="narrative" id="narrative">Takeaways </h3>{% block narrative %}{% endblock %}
+        </div>
+    </div>
+    {% block problem %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layout4.html" %}
+
+
+{% block title %}
+     Math Symbols
+{% endblock %}
+
+
+
+{% block conceptTitle %}
+    LaTex
+{% endblock %}
+
+{% block conceptDescript %}
+  <p><img src="/static/latex-project-logo.svg" alt="Logo for LaTex Project"></p>
+<p>LaTex is a typesetting system designed to allow users to create documents with
+math symmbols and notation. <a href="https://www.latex-project.org/">The LaTex Project</a>
+    has lots of resources that you can use to udnerstand how to use laTex. There are a number
+    of <a href="https://www.codecogs.com/latex/eqneditor.php">online LaTex equation editors</a>.</p>
+{% endblock %}
+{% block conceptVideo %}<iframe width="560" height="315" src="https://www.youtube.com/embed/NJN4H89T33Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>{% endblock %}
+{% block uses %}
+Latex was initially designed to work with printed articles. Although it was not
+intended for use on websites, it has become a tool that many math teachers use
+when creating content in the digital realm.
+{% endblock %}
+{% block narrative %}
+One draw back of using a Latex equation editor is that it produces images of the
+equations and the symbols which the math teacher wants to use. Those images are not
+searchable, and cannot be read by a screen reader. Those images also need to
+be edited in laTex, so they can be unweildy. Each time I want a new equation, I would need to
+create a new version in the laTex editor and down load a new image. The images can often
+present formatting problems on wysiwyg editors and word processors.
+{% endblock %}
+{% block concept %}
+<p>The laTex code which renders
+the formula is $x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$.</p>
+<p>The image is the one which I downloaded in the video above<img src="/static/CodeCogsEqn.gif"  width="33%" alt="Quadratic Formula" /></p>
+
+{% endblock %}

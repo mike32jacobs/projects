@@ -1,0 +1,64 @@
+{% extends "layout2.html" %}
+
+{% block title %}
+    Problem 1: More Math Symbols
+{% endblock %}
+
+{% block probTitle %}
+  mathml Doesn't Display In Some Browsers
+{% endblock %}
+{% block probDescript %}
+  <p>Sometimes you think that you have solved a problem, but you have not. I used mathml
+    to display a system of equations. It seemed to work the solution worked in my Canvas
+    LMS instance, but it was not working on this web application that you are viewing. With
+    a little help from Thomas Ballatore, I realized that it worked on Safari, and it worked
+    within Canvas on Chrome. It did not work in this web application on Chrom. It turns out
+    that Chrome does not support mathml. Canvas does some other web magic to make it appear
+    correctly.
+    </p>
+  <p>
+    My goal is to do some of that web magic here.
+    <img id="problem screenshot"src="/static/mathml.png" alt="Screen shot of this web page being rendered in two different browsers. The systenm of equations properly displays in Safari, but not in Chrome." width="100%">
+  </p>
+{% endblock %}
+
+{% block probVideo %}<iframe width="560" height="315" src="https://www.youtube.com/embed/6WZEsNdFS9Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>{% endblock %}
+
+{% block solution %}
+  <p>There are a few possible solutions to this problem, but each has it's costs.
+  </p>
+  <ul id="solutions">
+    <li> Ask users to use a specific browswer. The problem with this solution is that
+    the teacher may not have the ability to influence a student's browser choice. In my school,
+    students use Chromebooks, so using Safari is not an option.</li>
+    <li> Use images. You can take a screenshot of the system of equations.
+    This will work, but if you do it frequently, it could be a time consuming process.
+    A look at <a href="/problem2">Problem 2</a> will show you how to take a screenshot, and then upload a
+    desription into the Canvas LMS. Making the image accessible is important, but also
+    time-consuming</li>
+    <li> Use Mathjax to do this for you. This is a very effective solution, but it requires a basic knowledge
+      of html, and javascript. Althouth the solution is effective, it is not reasonable to expect that all
+      math teachers will be willing and able to add this to their tool box.</li>
+  </ul>
+{% endblock %}
+
+{% block narrative %}
+<p><a href="https://www.mathjax.org/#gettingstarted" >MathJax</a> is a javascript display engine for mathematics. It is already a
+  part of the Canvas LMS which is why the system of equations displayed the way
+  I intended it to in Canvas. Chrome does not support mathml, so my code was not
+  displaying as I intended it. If you are writing your own html, you can use <a href="https://www.mathjax.org/#gettingstarted" >MathJax</a>
+  by adding two lines of code.
+</p>
+<p>
+  Copy and paste these two lines of code into your html source code, or javascript file. Once you have done this, then everything should display correctly.
+</p>
+<p><figure id= "codesnippet">
+  <figcaption>MathJax Script</figcaption>
+  <pre>
+    <code>
+      <p>&lt;script src="https://polyfill.io/v3/polyfill.min.js?features=es6"&gt;&lt;/script&gt;</p>
+      <p>&lt;script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"&gt;&lt;/script&gt;</p>
+    </code>
+  </pre>
+</figure></p>
+{% endblock %}

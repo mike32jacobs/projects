@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Layout 3
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+
+        <div class="sidenav">
+          <a href="/latex">LaTex</a>
+          <a href="/mathml">MathMl</a>
+          <a href="/mathjax">Math Jax</a>
+          <a href="/tryit">Try It Out</a>
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+{% endblock %}
