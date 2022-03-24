@@ -1,0 +1,11 @@
+{% extends "posts/layout.html" %}
+{% load static %}
+
+{% block body %}
+<form action="{% url 'edit_problem' pk  %}" method="POST">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.as_p }}
+    <input type="submit", value="Update"
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "posts/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+  <div>
+      <div class="sidenav">
+        <a href="{% url 'latex' %}">LaTex</a>
+        <a href="{% url 'mathml' %}">MathMl</a>
+        <a href="{% url 'mathjax' %}">Math Jax</a>
+      </div>
+      {% block content %}{% endblock %}
+  </div>
+{% endblock %}

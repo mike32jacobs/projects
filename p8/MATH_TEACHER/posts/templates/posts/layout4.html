@@ -1,0 +1,13 @@
+{% extends "posts/layout3.html" %}
+{% load static %}
+
+{% block content %}
+<div class="symbols" id="symbols">
+    <h1 class="concept-title">Concept Name: {% block conceptTitle %}{% endblock %}</h1>
+    <h3 class="concept-description">Concept Description </h3>{% block conceptDescript %}{% endblock %}
+    <h3 class="concept-video">Concept Video </h3>{% block conceptVideo %}{% endblock %}
+    <h3 class="concept-uses">Potential Uses </h3>{% block uses %}{% endblock %}
+    <h3 class="narrative">Takeaways </h3>{% block narrative %}{% endblock %}
+    {% block morecontent %}{% endblock %}
+</div>
+{% endblock %}

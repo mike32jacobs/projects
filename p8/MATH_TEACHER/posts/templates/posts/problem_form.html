@@ -1,0 +1,11 @@
+{% extends "posts/layout.html" %}
+{% load static %}
+
+{% block body %}
+<form action="problem/add" method="POST">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.as_p }}
+    <input type="submit", value="Save"
+</form>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "posts/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="card w-75">
+    <div class="card-body">
+        <h5 class="card-title"><b>Add Your Own Problem:</b> 
+            <a href="{% url 'add_problem' %}">
+                Add a new problem.
+             </a>
+        </h5>
+    </div>
+</div>
+
+    <h2>{{ title }}</h2>
+    
+    {% if profile %}
+        
+        <ul>
+            <li>Followers: {{ profile.followers.count }}</li>
+            <li>Following: {{ profile.following.count }}</li>
+        </ul>
+        {% if request.user.is_authenticated and profile != request.user %}
+            {% if request.user not in profile.followers.all %}
+                <form action="{% url 'follow' profile.username %}" method="post">
+                    {% csrf_token %}
+                    <input class="btn btn-small btn-primary" type="submit" value="Follow" />
+                </form>
+            {% else %}
+                <form action="{% url 'unfollow' profile.username %}" method="post">
+                    {% csrf_token %}
+                    <input class="btn btn-small btn-primary" type="submit" value="Unfollow" />
+                </form>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% csrf_token %}
+    {% for problem in page.object_list %}
+        <div class="card w-75">
+            <div class="card-body">
+                <h5 class="card-title"><b>Problem Author:</b> 
+                    <a href="{% url 'user' problem.author.username %}">
+                        {{ problem.author.username }}
+                    </a>
+                </h5>
+                <div data-post="{{ problem.id }}" class="problem-content"><b>Short Description:</b> {{ problem.short_description }}</div>
+                <div class="info"><b>Date Created:</b> {{ problem.timestamp }}</div>
+                <div class="info">
+                    <i
+                        data-like="{% if user in problem.likes.all %}1{% else %}0{% endif %}"
+                        data-post="{{ problem.id }}"
+                        class="{% if user.is_authenticated %}heart{% endif %} fa fa-heart {% if user in problem.likes.all %}liked{% else %}not-liked{% endif %}"
+                    ></i>
+                    <span class="like-count" data-post="{{ problem.id }}"><b>Likes:</b> {{ problem.likes.count }}</span>
+                </div>
+                <div>
+                    <a href="{% url 'problem' problem.id %}">View the full problem
+                        {{ problem.id }}
+                    </a>
+                </div>
+                {% if problem.author == request.user %}
+                <div>
+                    <a href="{% url 'edit_problem' problem.id %}">Edit Problem
+                        {{ problem.id }}
+                    </a>
+                </div>
+            {% endif %}
+
+            </div>
+        </div>
+    {% endfor %}
+    
+    <hr>
+    <ul class="pagination pagination-sm">
+        {% if page.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">Newer Problems</a></li>
+        {% endif %}
+        {% if page.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">Older Problems</a></li>
+        {% endif %}
+    </ul>
+
+    <script src="{% static 'network/scripts.js' %}"></script>
+{% endblock %}
