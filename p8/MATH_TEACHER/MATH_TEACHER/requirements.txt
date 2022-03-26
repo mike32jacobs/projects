@@ -1,6 +1,0 @@
-make the migrations:
-    python3 manage.py makemigrations posts
-    python3 manage.py migrate
-ckeditor:
-    pip install django-ckeditor
-    here is a link to the documentation in case you need further instructions. https://pypi.org/project/django-ckeditor/
