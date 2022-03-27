@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wordle</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style type="" text/css">
+        #board-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        #board {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            grid-gap: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            width: 350px;
+            height: 420px;
+        
+        }
+        .game-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 5px;
+        }
+
+        
+        .tile {
+            width: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            line-height: 2rem;
+            font-weight: bold;
+            vertical-align: middle;
+            box-sizing: border-box;
+            color: var(--tile-text-color);
+            text-transform: uppercase;
+            user-select: none;
+        }
+        .tile::before {
+            content: '';
+            display: inline-block;
+            padding-bottom: 100%;
+        }
+
+        /* Allow tiles to be smaller on small screens */
+        @media (max-height: 600px) {
+            .tile {
+            font-size: 1em;
+            line-height: 1em;
+            }
+        }
+
+        .tile[data-state='empty'] {
+            border: 2px solid var(--color-tone-4);
+        }
+        .tile[data-state='tbd'] {
+            background-color: var(--color-tone-7);
+            border: 2px solid var(--color-tone-3);
+            color: var(--color-tone-1);
+        }
+        .tile[data-state='correct'] {
+            background-color: var(--color-correct);
+        }
+        .tile[data-state='present'] {
+            background-color: var(--color-present);
+        }
+        .tile[data-state='absent'] {
+            background-color: var(--color-absent);
+        }
+
+        .tile[data-animation='pop'] {
+            animation-name: PopIn;
+            animation-duration: 100ms;
+        }
+        .absent{
+            background-color: ;
+        }
+       :root {
+            --color-tone-1: #000000;
+            --color-tone-2: #787c7e;
+            --color-tone-3: #878a8c;
+            --color-tone-4: #d3d6da;
+            --color-tone-5: #edeff1;
+            --color-tone-6: #f6f7f8;
+            --color-tone-7: #ffffff;
+            --color-nav-hover: #f4f4f4;
+            --opacity-50: rgba(255, 255, 255, 0.5);
+        }
+        :root{
+            --color-present: #c9b458;
+            --color-correct: #6aaa64;
+            --color-absent: #787c7e;
+            --tile-text-color: var(--color-tone-7);
+            --key-text-color: var(--color-tone-1);
+            --key-evaluated-text-color: var(--color-tone-7);
+            --key-bg: var(--color-tone-4);
+            --key-bg-present: var(--color-present);
+            --key-bg-correct: var(--color-correct);
+            --key-bg-absent: var(--color-absent);
+            --modal-content-bg: var(--color-tone-7);
+        }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <div id="board-container">
+        <div id="board">
+            <div class="game-row">
+                <div class="tile" data-state="present">a</div>
+                <div class="tile" data-state="present">b</div>
+                <div class="tile" data-state="present">c</div>
+                <div class="tile" data-state="present">l</div>
+                <div class="tile" data-state="present">d</div>
+            </div><!-- end row -->
+            <div class="game-row">
+                <div class="tile" data-state="present">a</div>
+                <div class="tile" data-state="present">b</div>
+                <div class="tile" data-state="present">c</div>
+                <div class="tile" data-state="present">l</div>
+                <div class="tile" data-state="present">d</div>
+            </div><!-- end row -->
+            <div class="game-row">
+                <div class="tile" data-state="absent">a</div>
+                <div class="tile" data-state="absent">b</div>
+                <div class="tile" data-state="correct">c</div>
+                <div class="tile" data-state="correct">l</div>
+                <div class="tile" data-state="present">d</div>
+            </div><!-- end row -->
+            <div class="game-row">
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+            </div><!-- end row -->
+            <div class="game-row">
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+            </div><!-- end row -->
+            <div class="game-row">
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+                <div class="tile" data-state="empty"></div>
+            </div><!-- end row -->
+        </div>
+        <!-- end board -->
+        
+      </div>
+      <!-- end board-container -->
+    </div>
+    <div id="keyboard-container"></div>
+        <!-- end keyboard-container -->
+  </body>
+</html>
