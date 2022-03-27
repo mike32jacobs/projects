@@ -83,9 +83,7 @@
             animation-name: PopIn;
             animation-duration: 100ms;
         }
-        .absent{
-            background-color: ;
-        }
+
        :root {
             --color-tone-1: #000000;
             --color-tone-2: #787c7e;
@@ -110,6 +108,91 @@
             --key-bg-absent: var(--color-absent);
             --modal-content-bg: var(--color-tone-7);
         }
+        /* Keyboard CSS taken from Wordle */
+
+        :host {
+            height: var(--keyboard-height);
+        }
+        #keyboard {
+            margin: 0 8px;
+            user-select: none;
+        }
+        
+        .row {
+            display: flex;
+            width: 100%;
+            margin: 0 auto 8px;
+            /* https://stackoverflow.com/questions/46167604/ios-html-disable-double-tap-to-zoom */
+            touch-action: manipulation;
+        }
+        
+        button {
+            font-family: inherit;
+            font-weight: bold;
+            border: 0;
+            padding: 0;
+            margin: 0 6px 0 0;
+            height: 58px;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+            background-color: var(--key-bg);
+            color: var(--key-text-color);
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.3);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.fade {
+            /* transition: background-color 0.1s ease, color 0.1s ease; */
+            /* background-color: var(--color-absent); */
+            background-color: #787c7e;
+        }
+        
+        button:last-of-type {
+            margin: 0;
+        }
+        
+        .half {
+            flex: 0.5;
+        }
+        
+        .one {
+            flex: 1;
+        }
+
+        .one-and-a-half {
+            flex: 1.5;
+            font-size: 12px;
+        }
+        
+        .two {
+            flex: 2;
+        }
+
+        button[data-state='correct'] {
+            background-color: var(--key-bg-correct);
+            color: var(--key-evaluated-text-color);
+        }
+
+        button[data-state='present'] {
+            background-color: var(--key-bg-present);
+            color: var(--key-evaluated-text-color);
+        }
+
+        button[data-state='absent'] {
+            background-color: var(--key-bg-absent);
+            color: var(--key-evaluated-text-color);
+        }
+
+  
     </style>
   </head>
   <body>
@@ -163,8 +246,17 @@
         
       </div>
       <!-- end board-container -->
+    <div id="keyboard-container">
+        <div id="keyboard">
+            <div class="row"><button data-key="q">q</button><button data-key="w">w</button><button data-key="e" data-state="absent" class="fade">e</button><button data-key="r" data-state="absent" class="fade">r</button><button data-key="t" data-state="absent" class="fade">t</button><button data-key="y" data-state="correct" class="">y</button><button data-key="u" data-state="absent" class="fade">u</button><button data-key="i" data-state="absent" class="fade">i</button><button data-key="o" data-state="absent" class="fade">o</button><button data-key="p" data-state="correct" class="">p</button></div> <!--end row-->
+                
+            <div class="row"><div class="spacer half"></div><button data-key="a" data-state="absent" class="fade">a</button><button data-key="s" data-state="absent" class="fade">s</button><button data-key="d" data-state="absent" class="fade">d</button><button data-key="f">f</button><button data-key="g">g</button><button data-key="h" data-state="correct" class="">h</button><button data-key="j">j</button><button data-key="k">k</button><button data-key="l" data-state="absent" class="fade">l</button><div class="spacer half"></div></div> <!--end row-->           
+            <div class="row"><button data-key="↵" class="one-and-a-half">enter</button><button data-key="z">z</button><button data-key="x">x</button><button data-key="c" data-state="absent" class="fade">c</button><button data-key="v">v</button><button data-key="b">b</button><button data-key="n" data-state="correct" class="">n</button><button data-key="m" data-state="correct" class="">m</button><button data-key="←" class="one-and-a-half"><game-icon icon="backspace"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+            <path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path></game-icon></button></div><!--end row-->
+        </div><!-- end keyboard -->
     </div>
-    <div id="keyboard-container"></div>
         <!-- end keyboard-container -->
+            </div> <!-- End game-->
+
   </body>
 </html>
