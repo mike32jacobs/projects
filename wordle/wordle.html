@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wordle</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style type="" text/css">
+        #board-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        #board {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            grid-gap: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            width: 350px;
+            height: 420px;
+        
+        }
+        .game-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 5px;
+        }
+
+        
+        .tile {
+            width: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            line-height: 2rem;
+            font-weight: bold;
+            vertical-align: middle;
+            box-sizing: border-box;
+            color: var(--tile-text-color);
+            text-transform: uppercase;
+            user-select: none;
+        }
+        .tile::before {
+            content: '';
+            display: inline-block;
+            padding-bottom: 100%;
+        }
+
+        /* Allow tiles to be smaller on small screens */
+        @media (max-height: 600px) {
+            .tile {
+            font-size: 1em;
+            line-height: 1em;
+            }
+        }
+
+        .tile[data-state='empty'] {
+            border: 2px solid var(--color-tone-4);
+        }
+        .tile[data-state='tbd'] {
+            background-color: var(--color-tone-7);
+            border: 2px solid var(--color-tone-3);
+            color: var(--color-tone-1);
+        }
+        .tile[data-state='correct'] {
+            background-color: var(--color-correct);
+        }
+        .tile[data-state='present'] {
+            background-color: var(--color-present);
+        }
+        .tile[data-state='absent'] {
+            background-color: var(--color-absent);
+        }
+
+        .tile[data-animation='pop'] {
+            animation-name: PopIn;
+            animation-duration: 100ms;
+        }
+
+       :root {
+            --color-tone-1: #000000;
+            --color-tone-2: #787c7e;
+            --color-tone-3: #878a8c;
+            --color-tone-4: #d3d6da;
+            --color-tone-5: #edeff1;
+            --color-tone-6: #f6f7f8;
+            --color-tone-7: #ffffff;
+            --color-nav-hover: #f4f4f4;
+            --opacity-50: rgba(255, 255, 255, 0.5);
+        }
+        :root{
+            --color-present: #c9b458;
+            --color-correct: #6aaa64;
+            --color-absent: #787c7e;
+            --tile-text-color: var(--color-tone-7);
+            --key-text-color: var(--color-tone-1);
+            --key-evaluated-text-color: var(--color-tone-7);
+            --key-bg: var(--color-tone-4);
+            --key-bg-present: var(--color-present);
+            --key-bg-correct: var(--color-correct);
+            --key-bg-absent: var(--color-absent);
+            --modal-content-bg: var(--color-tone-7);
+        }
+        /* Keyboard CSS taken from Wordle */
+
+        :host {
+            height: var(--keyboard-height);
+        }
+        #keyboard {
+            margin: 0 8px;
+            user-select: none;
+        }
+        
+        .row {
+            display: flex;
+            width: 100%;
+            margin: 0 auto 8px;
+            /* https://stackoverflow.com/questions/46167604/ios-html-disable-double-tap-to-zoom */
+            touch-action: manipulation;
+        }
+        
+        button {
+            font-family: inherit;
+            font-weight: bold;
+            border: 0;
+            padding: 0;
+            margin: 0 6px 0 0;
+            height: 58px;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+            background-color: var(--key-bg);
+            color: var(--key-text-color);
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.3);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.fade {
+            /* transition: background-color 0.1s ease, color 0.1s ease; */
+            /* background-color: var(--color-absent); */
+            background-color: #787c7e;
+        }
+        
+        button:last-of-type {
+            margin: 0;
+        }
+        
+        .half {
+            flex: 0.5;
+        }
+        
+        .one {
+            flex: 1;
+        }
+
+        .one-and-a-half {
+            flex: 1.5;
+            font-size: 12px;
+        }
+        
+        .two {
+            flex: 2;
+        }
+
+        button[data-state='correct'] {
+            background-color: var(--key-bg-correct);
+            color: var(--key-evaluated-text-color);
+        }
+
+        button[data-state='present'] {
+            background-color: var(--key-bg-present);
+            color: var(--key-evaluated-text-color);
+        }
+
+        button[data-state='absent'] {
+            background-color: var(--key-bg-absent);
+            color: var(--key-evaluated-text-color);
+        }
+
+  
+    </style>
+  </head>
+  <body>
+    <div class ="row-container" id="my-row"></div>
+
+    <script>
+        function Tile(letter=""){
+            this.state = "empty";
+            this.letter = letter;
+            this.evaluateTile = evaluateTile;
+            this.setLetter =setLetter;
+            this.makeTileDiv = makeTileDiv;
+            this.setState = setState;
+        //     this.displayTile = (i) =>
+        //   `<div class='tile' data-state='${this.state}' data-letter='${this.letter}' name="${i}">${this.letter}</div>`;
+        }
+        function makeTileDiv(){
+            //Make sure the tile is evaluated
+            this.evaluateTile();
+
+            let tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'>${this.letter}</div>`;
+
+            return tileDiv;
+
+        }
+        function evaluateTile(){
+            // The letter is going to be one of four things: empty, absent, present, or correct
+            // if this.letter is an empty string, the the state is empty
+            if(this.letter ==""){
+                console.log("mark 8");
+                this.setState("empty");
+            }else{
+                // Determine if the letter is in the word
+                if (this.letter=="a"){
+                    console.log("mark 9: ");
+                    this.setState("correct");
+                }
+            }
+            return;
+        }
+        function setLetter(letter){
+            this.letter=letter;
+        }
+        function setState(state){
+            this.state=state;
+        }
+
+        function Word(){
+            this.word = word;
+            this.evaluateWord;
+            this.guess = "incorrect"
+        }
+
+// This will be al test code to see if I can build a bit at a time
+        a = new Tile("a");
+        b = new Tile("b");
+        emptyTile = new Tile;
+        console.log("a " + a.state);
+        console.log("b " + b.letter);
+        console.log("emptyTile" + emptyTile);
+        console.log(a.displayTile);
+
+
+        var tileDiv = a.makeTileDiv();
+        console.log("Mark 1: tileDiv "+ tileDiv);
+        var rowDiv= document.getElementById("my-row");
+        console.log("Mark 2: rowDiv "+ rowDiv);
+
+        rowDiv.innerHTML = tileDiv;
+
+
+
+ 
+    </script>
+  </body>
+</html>
