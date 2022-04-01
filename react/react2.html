@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+    <title>React Try It - 1</title>
+    <style type="text/css">
+      .quote {
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="myapp"></div>
+    <div id="myapp2"></div>
+    <div id="myapp3"></div>
+    <hr />
+    <div id="myapp4"></div>
+    <div id="myapp5"></div>
+
+    <script>
+      var quote = React.createElement(
+        "p",
+        { className: "quote" },
+        "Four score and sevem years ago"
+      );
+
+      ReactDOM.render(quote, myapp);
+
+      var select = React.createElement(
+        "select",
+        { name: "pick" },
+        React.createElement("option", null, "Basic"),
+        React.createElement("option", null, "Standard"),
+        React.createElement("option", null, "Premium")
+      );
+
+      ReactDOM.render(select, myapp2);
+
+      var myList = React.createElement(
+        "ol",
+        null,
+        React.createElement("li", null, "Finance"),
+        React.createElement("li", null, "Weather"),
+        React.createElement("li", null, "Sports")
+      );
+
+      ReactDOM.render(myList, myapp3);
+      var myLink = React.createElement(
+        "a",
+        { href: "https://finance.yahoo.com", target: "blank" },
+        "finance"
+      );
+      ReactDOM.render(myLink, myapp4);
+
+      var sites = ["Finance", "Weather", "Sports"];
+      var myList2 = React.createElement(
+        "ol",
+        null,
+        sites.map(
+          (label, i) =>
+            React.createElement(
+              "li",
+              { key: i },
+              React.createElement("a", { href: "#", target: "_blank" }, label) //end create a
+            ) // end create li
+        ) // end map
+      ); // end ol
+
+      ReactDOM.render(myList2, myapp5);
+    </script>
+  </body>
+</html>
