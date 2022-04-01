@@ -197,6 +197,15 @@
   </head>
   <body>
     <div class ="row-container" id="my-row"></div>
+        <hr>
+    <h1> This is the wordle word</h1>
+    <div id="word"></div>
+    <div class=game-row id="guess1"></div>
+    <div class=game-row id="guess2"></div>
+    <div class=game-row id="guess3"></div>
+    <div class=game-row id="guess4"></div>
+    <div class=game-row id="guess5"></div>
+    <div class=game-row id="guess6"></div>
 
     <script>
         function Tile(letter=""){
@@ -204,19 +213,11 @@
             this.letter = letter;
             this.evaluateTile = evaluateTile;
             this.setLetter =setLetter;
-            this.makeTileDiv = makeTileDiv;
             this.setState = setState;
+            this.makeTileDiv = makeTileDiv;
+
         //     this.displayTile = (i) =>
         //   `<div class='tile' data-state='${this.state}' data-letter='${this.letter}' name="${i}">${this.letter}</div>`;
-        }
-        function makeTileDiv(){
-            //Make sure the tile is evaluated
-            this.evaluateTile();
-
-            let tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'>${this.letter}</div>`;
-
-            return tileDiv;
-
         }
         function evaluateTile(){
             // The letter is going to be one of four things: empty, absent, present, or correct
@@ -239,37 +240,95 @@
         function setState(state){
             this.state=state;
         }
+        function makeTileDiv(){
+            //Make sure the tile is evaluated
+            this.evaluateTile();
 
-        function Word(){
-            this.word = word;
-            this.evaluateWord;
-            this.guess = "incorrect"
+            let tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'>${this.letter}</div>`;
+
+            return tileDiv;
+
         }
+
+/*********************************************************/
+        function Guess(guess, isCorrect= false){
+            this.guess = guess;
+            this.correct = isCorrect;
+            this.evaluateGuess=evaluateGuess;
+            this.setCorrect = setCorrect;
+            this.makeGuessDiv = makeGuessDiv;
+        }
+        function evaluateGuess(){
+            // check to see if the guess matches the wordle.
+            if(this.guess =="yes!!"){
+                //The guess is correct
+                this.setCorrect;
+            }
+            return;
+        }
+        function setCorrect(){
+            // I am not sure if I need a function here. This is to avoid having other classes directly manipulate Guess properties.
+            this.setCorrect = true;
+        }
+
+        function makeGuessDiv(){
+            // This function will return a div to display a Guess.
+            //Make sure the guess is evaluated
+            this.evaluateGuess();
+
+            // let guessDiv = `<div class=game-row></div>`;
+            var guessDiv= document.getElementById("guess1");
+            console.log("Mark 12- guessDiv: "+guessDiv);
+            // Loop through the letters in the guess and make a tile for each
+            for (let char of this.guess) {
+                console.log(char);
+                console.log("mark 4: char: " + char);
+                new Tile(char);
+                guessDiv.innerHTML+=char.makeTileDiv();
+                
+            }
+            console.log("mark 8: guessDiv"+ guessDiv);
+
+            return guessDiv;
+        }
+/******************************************************** game */
+function Game(name, isOver = false){
+    this.name = name;
+    this.isOver = isOver;
+}
+
 
 // This will be al test code to see if I can build a bit at a time
         a = new Tile("a");
         b = new Tile("b");
+        
         emptyTile = new Tile;
+        guess1 = new Guess("least");
+
         console.log("a " + a.state);
         console.log("b " + b.letter);
-        console.log("emptyTile" + emptyTile);
+        console.log("guess1 " + guess1.guess);
         console.log(a.displayTile);
 
 
         var tileDiv = a.makeTileDiv();
         console.log("Mark 1: tileDiv "+ tileDiv);
-        var rowDiv= document.getElementById("my-row");
-        console.log("Mark 2: rowDiv "+ rowDiv);
+
+        var guessDiv= guess1.makeGuessDiv();
+        console.log("Mark 2: rowDiv "+ guessDiv);
+
+        tileDiv.innerHTML = tileDiv;
+
+        guess1 = new Guess("least");
+        guessDiv = guess1.makeGuessDiv;
 
         rowDiv.innerHTML = tileDiv;
 
-
-
  
     </script>
-    <hr>
-    <h1> This is the wordle word</h1>
-    <p id="word"></p>
+
+
+
     <script>
         const options = {
             method: 'GET',
@@ -279,7 +338,7 @@
             }
         };
 
-        fetch('https://twinword-word-graph-dictionary.p.rapidapi.com/example/?entry=tger', options)
+        fetch('https://twinword-word-graph-dictionary.p.rapidapi.com/example/?entry=tiger', options)
             .then(response => response.json())
             .then(response => {
                 console.log(response);
