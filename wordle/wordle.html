@@ -208,6 +208,8 @@
     <div class=game-row id="guess6"></div>
 
     <script>
+        // const API_KEY_DICTIONARY = process.env.API_KEY_DICTIONARY;
+
         function Tile(letter=""){
             this.state = "empty";
             this.letter = letter;
@@ -335,6 +337,7 @@ function Game(name, isOver = false){
             headers: {
                 'X-RapidAPI-Host': 'twinword-word-graph-dictionary.p.rapidapi.com',
                 'X-RapidAPI-Key': 'e5cfbfa955msh7a91b25079074c5p1f0709jsn4a938e9d07cc'
+
             }
         };
 
