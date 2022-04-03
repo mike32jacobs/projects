@@ -247,40 +247,64 @@
         }
 
         /* Guess Class **************************************************** */
-            class Guess{
-            constructor(word=""){
-                this.word=word;
+            class Guess {
+            constructor(guess, number=1){
+                this.guess=guess;
+                this.number=number;
                 this.state = "empty";
             }
-            evaluateTile(){
-                // The letter is going to be one of four things: empty, absent, present, or correct
-                // if this.letter is an empty string, the the state is empty
-                if(this.letter ==""){
-                    console.log("mark 8");
+            evaluateGuess(){
+                // The guess is going to be one of three things: empty, correct, or incorrect.
+
+                // if this.guess is an empty string, the the state is empty
+                if(this.guess ==""){
                     this.setState("empty");
                 }else{
                     // Determine if the letter is in the word
-                    if (this.letter=="a"){
-                        // Use a global variable for correct Wordle.
-                        console.log("mark 9: ");
+                    if (this.guess=="wordle"){
+                        // This is the correct word. 
+                        console.log("mark 19: ");
                         this.setState("correct");
+                    }else{
+                        // The guess is incorrect
+                        this.setState("inccorrect");
                     }
                 }
-            return;
+                return;
+
             }
-            setLetter(letter){
-                this.letter=letter;
+            setGuess(word){
+                this.guess=word;
+            }
+            setNumber(number){
+                this.number=number;
             }
             setState(state){
+                // Options are empty, correct or incorrect
                 this.state=state;
             }
-            makeTileDiv(){
-                //Make sure the tile is evaluated
-                this.evaluateTile();
+            makeGuessDiv(){
+                //Make sure the guess is evaluated
+                this.evaluateGuess();
 
-                let tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'>${this.letter}</div>`;
+                var tilesDiv = "";
 
-                return tileDiv;
+
+                // Make a tile div for each letter in the guess
+                for (let i in this.guess) {
+                    let letter = new Tile(this.guess[i]);
+                    tilesDiv += letter.makeTileDiv();
+
+                    console.log("Mark 15")
+                    console.log(this.guess[i]);
+                }
+                    console.log("Mark 16; tilesDiv"+ tilesDiv);
+
+
+                // Make the div for the guess
+                let guessDiv = `<div class='game-row' data-state='${this.state}' data-guess='${this.guess}' data-number='${this.number}'>`+tilesDiv+`</div>`;
+ 
+                return guessDiv;
             }
         }
 
@@ -314,6 +338,14 @@
         guessDiv.innerHTML=tileDiv1;
         guessDiv.innerHTML+=tileDiv2;
         guessDiv.innerHTML+=tileDiv2;
+
+        guess1 = new Guess("least", 1);
+        console.log(guess1);
+        console.log("Mark 11: guess1.guess " + guess1.guess);
+        console.log("guess1.number " + guess1.number);
+        console.log("guess1.state " + guess1.state);
+        var guessDiv2 = guess1.makeGuessDiv();
+        console.log("guessDiv2: "+guessDiv2);
 
 
 </script>
