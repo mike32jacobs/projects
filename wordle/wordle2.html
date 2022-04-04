@@ -196,6 +196,16 @@
     </style>
   </head>
   <body>
+    <div id="game">
+      <div id="board-container">
+        <div id="board"></div><!-- end board -->
+      </div><!-- end board-container -->
+      <div id="keyboard-container">
+        <div id="keyboard"></div><!-- end keyboard -->
+    </div><!-- end keyboard-container -->
+    </div> <!-- End game-->
+    
+    <hr>
     <div class ="row-container" id="my-row"></div>
         <hr>
     <h1> This is the wordle word</h1>
@@ -248,7 +258,7 @@
 
         /* Guess Class **************************************************** */
             class Guess {
-            constructor(guess, number=1){
+            constructor(guess="", number=1){
                 this.guess=guess;
                 this.number=number;
                 this.state = "empty";
@@ -310,42 +320,79 @@
 
 
         /* Game Class**************************************************** */
+        class Game{
+            constructor(name, wordle = "wordl") {
+                this.name=name;
+                this.wordle=wordle; // wordle is my wvariable name for winning word
+                this.guesses = [];
+                this.gameOver = false;
+            }
+            
+            buildGuesses(){
+                // Make 6 empty guesses
+                for (let i=1; i<7;i++){
+                    let name = ("guess"+i);
+                    name = new Guess("",i);
+                    this.guesses.push(name);
+                }
+            }
+            displayBoard(){
+                // This function will create guessDivs for each guess, and display them. 
+
+                var boardDiv = document.getElementById("board");
+                let guessesDiv="";
+                // Get the Div for each guess
+                for (let i=0; i<6;i++){
+                    guessesDiv +=this.guesses[i].makeGuessDiv();
+                }
+                // Make the div for the guess
+                boardDiv.innerHTML = guessesDiv;
+
+            }
+
+        }
 
         /* Runtime **************************************************** */
         
         // This will be al test code to see if I can build a bit at a time
-        a = new Tile("a");
-        b = new Tile("b");
-        emptyTile = new Tile;
-        console.log("a.state " + a.state);
-        console.log("a.letter " + a.letter);
-        console.log("b.state " + b.state);
-        console.log("b.letter " + b.letter);
-        a.evaluateTile();
-        b.evaluateTile();
-        console.log("a.state " + a.state);
-        console.log("a.letter " + a.letter);
-        console.log("b.state " + b.state);
-        console.log("b.letter " + b.letter);
 
-        var tileDiv1 = a.makeTileDiv();
-        console.log("Mark 1: tileDiv1 "+ tileDiv1);
 
-        var tileDiv2 = b.makeTileDiv();
-        console.log("Mark 2: tileDiv2 "+ tileDiv2);
+        // a = new Tile("a");
+        // b = new Tile("b");
+        // emptyTile = new Tile;
+        // console.log("a.state " + a.state);
+        // console.log("a.letter " + a.letter);
+        // console.log("b.state " + b.state);
+        // console.log("b.letter " + b.letter);
+        // a.evaluateTile();
+        // b.evaluateTile();
+        // console.log("a.state " + a.state);
+        // console.log("a.letter " + a.letter);
+        // console.log("b.state " + b.state);
+        // console.log("b.letter " + b.letter);
 
-        var guessDiv = document.getElementById("guess1");
-        guessDiv.innerHTML=tileDiv1;
-        guessDiv.innerHTML+=tileDiv2;
-        guessDiv.innerHTML+=tileDiv2;
+        // var tileDiv1 = a.makeTileDiv();
+        // console.log("Mark 1: tileDiv1 "+ tileDiv1);
 
-        guess1 = new Guess("least", 1);
-        console.log(guess1);
-        console.log("Mark 11: guess1.guess " + guess1.guess);
-        console.log("guess1.number " + guess1.number);
-        console.log("guess1.state " + guess1.state);
-        var guessDiv2 = guess1.makeGuessDiv();
-        console.log("guessDiv2: "+guessDiv2);
+        // var tileDiv2 = b.makeTileDiv();
+        // console.log("Mark 2: tileDiv2 "+ tileDiv2);
+
+        // var guessDiv = document.getElementById("guess1");
+        // guessDiv.innerHTML=tileDiv1;
+        // guessDiv.innerHTML+=tileDiv2;
+        // guessDiv.innerHTML+=tileDiv2;
+
+        // guess1 = new Guess("least", 1);
+        // console.log(guess1);
+        // console.log("Mark 11: guess1.guess " + guess1.guess);
+        // console.log("guess1.number " + guess1.number);
+        // console.log("guess1.state " + guess1.state);
+        // var guessDiv2 = guess1.makeGuessDiv();
+        // console.log("guessDiv2: "+guessDiv2);
+
+        game1= new Game;
+        game1.buildGuesses();
+        game1.displayBoard();
 
 
 </script>
