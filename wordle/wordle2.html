@@ -335,22 +335,20 @@
                 this.name="my-keyboard"
                 this.row1=["q","w","e","r","t","y","u","i","o","p"];
                 this.row2 =["a","s","d","f","g","h","j","k","l"];
-                this.row3=["enter","z","x","c","v","b","n","m"];
+                this.row3=["enter","z","x","c","v","b","n","m","delete"];
+                this.rows=[this.row1, this.row2, this.row3];
             }
-            buildRow(){
-                // this.row1.forEach((key, i) => card.updateCard().unhold());
-                // document.getElementById("cards").innerHTML = this.cards.reduce(
-                // (s, card, i) => s + card.displayCardBlock(i),
-                // "");
-                this.row1.forEach(key=>{
-                    let newKey = new Key(key);
-                    let newButton = newKey.buildKey()
-                    document.getElementById("keyboard").innerHTML+=newButton;
-                });
-            }
-            makeButton(){
-                let myButton ="";
+            buildRows(){
 
+                this.rows.forEach((row, i)=>{
+                    let rowDiv = `<div class='row' id='row${i}'></div>`
+                    document.getElementById("keyboard").innerHTML+=rowDiv;
+                    row.forEach(key=>{
+                        let newKey = new Key(key);
+                        let newButton = newKey.buildKey()
+                        document.getElementById("row"+i).innerHTML+=newButton;
+                    });
+                })
             }
         }
         /* Key Class**************************************************** */
@@ -457,7 +455,7 @@
 
         keyboard = new Keyboard;
         console.log("keyboard.name: "+keyboard.name);
-        keyboard.buildRow();
+        keyboard.buildRows();
 
         mikey = new Key("r");
         console.log(mikey.buildKey());
