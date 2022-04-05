@@ -220,8 +220,9 @@
     <script>
         /* Tile Class  **************************************************** */
         class Tile{
-            constructor(letter=""){
+            constructor(letter="", number=0){
                 this.letter=letter;
+                this.number=number;
                 this.state = "empty";
             }
             evaluateTile(){
@@ -243,6 +244,9 @@
             setLetter(letter){
                 this.letter=letter;
             }
+            setNumber(number){
+                this.number=number;
+            }
             setState(state){
                 this.state=state;
             }
@@ -250,7 +254,13 @@
                 //Make sure the tile is evaluated
                 this.evaluateTile();
 
-                let tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'>${this.letter}</div>`;
+                let tileDiv ="";
+                if(this.state = "empty"){
+                    tileDiv = `<div class='tile' data-state='${this.state}'data-number='${this.number}'></div>`
+                }else{
+                    tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'data-number='${this.number}'>${this.letter}</div>`;
+                }
+
 
                 return tileDiv;
             }
@@ -302,7 +312,9 @@
 
                 // Make a tile div for each letter in the guess
                 for (let i in this.guess) {
-                    let letter = new Tile(this.guess[i]);
+                    let j = parseInt(i)+1;
+
+                    let letter = new Tile(this.guess[i],j);
                     tilesDiv += letter.makeTileDiv();
 
                     console.log("Mark 15")
@@ -312,18 +324,58 @@
 
 
                 // Make the div for the guess
-                let guessDiv = `<div class='game-row' data-state='${this.state}' data-guess='${this.guess}' data-number='${this.number}'>`+tilesDiv+`</div>`;
+                let guessDiv = `<div class='game-row' data-state='${this.state}' data-guess='${this.guess}' data-number='${this.number}' id=guess${this.number}>`+tilesDiv+`</div>`;
  
                 return guessDiv;
             }
         }
+        /* Keyboard Class**************************************************** */
+        class Keyboard{
+            constructor(){
+                this.name="my-keyboard"
+                this.row1=["q","w","e","r","t","y","u","i","o","p"];
+                this.row2 =["a","s","d","f","g","h","j","k","l"];
+                this.row3=["enter","z","x","c","v","b","n","m"];
+            }
+            buildRow(){
+                // this.row1.forEach((key, i) => card.updateCard().unhold());
+                // document.getElementById("cards").innerHTML = this.cards.reduce(
+                // (s, card, i) => s + card.displayCardBlock(i),
+                // "");
+                this.row1.forEach(key=>{
+                    let newKey = new Key(key);
+                    let newButton = newKey.buildKey()
+                    document.getElementById("keyboard").innerHTML+=newButton;
+                });
+            }
+            makeButton(){
+                let myButton ="";
 
+            }
+        }
+        /* Key Class**************************************************** */
+        class Key{
+            constructor(name){
+                this.name=name;
+                this.state="?";
+            }
+            buildKey(){
+                let key = "";
+                key = `<button data-key='${this.name}'data-state='${this.state}'>${this.name}</button>`;
+            
+                return key;
+            }
+            setState(state){
+                // Options are present, correct or incorrect
+                this.state=state;
+            }
+        }
 
         /* Game Class**************************************************** */
         class Game{
             constructor(name, wordle = "wordl") {
                 this.name=name;
-                this.wordle=wordle; // wordle is my wvariable name for winning word
+                this.wordle=wordle; // wordle is my wy variable name for winning word
                 this.guesses = [];
                 this.gameOver = false;
             }
@@ -332,21 +384,29 @@
                 // Make 6 empty guesses
                 for (let i=1; i<7;i++){
                     let name = ("guess"+i);
-                    name = new Guess("",i);
+                    name = new Guess("least",i);
                     this.guesses.push(name);
                 }
             }
+
             displayBoard(){
                 // This function will create guessDivs for each guess, and display them. 
 
                 var boardDiv = document.getElementById("board");
+                // First, create six rows
                 let guessesDiv="";
                 // Get the Div for each guess
                 for (let i=0; i<6;i++){
                     guessesDiv +=this.guesses[i].makeGuessDiv();
                 }
-                // Make the div for the guess
+
+                // Make the div for the guesses
                 boardDiv.innerHTML = guessesDiv;
+
+                // Now build the divs for the tiles in each row
+
+
+
 
             }
 
@@ -390,10 +450,17 @@
         // var guessDiv2 = guess1.makeGuessDiv();
         // console.log("guessDiv2: "+guessDiv2);
 
-        game1= new Game;
+        game1= new Game("TestGame","least");
         game1.buildGuesses();
         game1.displayBoard();
+        console.log(game1.wordle);
 
+        keyboard = new Keyboard;
+        console.log("keyboard.name: "+keyboard.name);
+        keyboard.buildRow();
+
+        mikey = new Key("r");
+        console.log(mikey.buildKey());
 
 </script>
 
