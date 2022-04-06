@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style type="" text/css">
-        #board-container{
+        #board-container {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,6 +31,7 @@
             grid-template-columns: repeat(5, 1fr);
             grid-gap: 5px;
         }
+
 
         
         .tile {
@@ -113,11 +114,36 @@
         :host {
             height: var(--keyboard-height);
         }
-        #keyboard {
-            margin: 0 8px;
+          /*#keyboard {
+           margin: 0 8px; 
+            margin: 0 auto 8px;
             user-select: none;
-        }
+        }*/
+        #keyboard {
+            display: grid;
+            grid-template-rows: repeat(3, 1fr);
+            grid-gap: 2px;
+            padding: 2px;
+            box-sizing: border-box;
+            /* width: 350px;
+            height: 420px; */
         
+        }
+        /* #keyboard{
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+            width: 80%;
+
+        } */
+        #keyboard-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+        }
         .row {
             display: flex;
             width: 100%;
@@ -218,6 +244,7 @@
     <div class=game-row id="guess6"></div>
 
     <script>
+        var winningWord="crazy"
         /* Tile Class  **************************************************** */
         class Tile{
             constructor(letter="", number=0){
@@ -228,15 +255,31 @@
             evaluateTile(){
                 // The letter is going to be one of four things: empty, absent, present, or correct
                 // if this.letter is an empty string, the the state is empty
+                console.log("mark 1: Inside the evaluate tile method");
                 if(this.letter ==""){
                     console.log("mark 8");
                     this.setState("empty");
                 }else{
-                    // Determine if the letter is in the word
-                    if (this.letter=="a"){
-                        // Use a global variable for correct Wordle.
-                        console.log("mark 9: ");
-                        this.setState("correct");
+                    // Determine if the letter is in the winningWord
+                    console.log("mark 19: The letter is in the winning word: "+window.winningWord.includes(this.letter));
+                    if (window.winningWord.includes(this.letter)){
+                        // The letter is in the winning word.
+                        console.log("mark 9: The letter is in the winning word");
+                        this.setState("present");
+
+                        // Now check to see if the letter is in the correct position.
+                        console.log("mark 20: this.number" + this.number);
+                        console.log("mark 21: winningWord.charAt(3) "+ winningWord.charAt(this.number-1));
+                        if (this.letter == winningWord.charAt(this.number-1)){
+                            // The letter of this tile is the same as the letter in the winning word
+                            this.setState("correct");
+
+                        }
+                        
+                    }else{
+                        // The letter is not in the winning word
+                        this.setState("absent");
+
                     }
                 }
             return;
@@ -257,6 +300,9 @@
                 let tileDiv ="";
                 if(this.state = "empty"){
                     tileDiv = `<div class='tile' data-state='${this.state}'data-number='${this.number}'></div>`
+                    console.log("Mark 42: This is an empty tile, because it is a blank guess");
+                    console.log("mark 43: "+tileDiv);
+                    console.log("mark44: this.letter "+ this.letter);
                 }else{
                     tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'data-number='${this.number}'>${this.letter}</div>`;
                 }
@@ -271,23 +317,24 @@
             constructor(guess="", number=1){
                 this.guess=guess;
                 this.number=number;
+                // this.winnningWord=winnningWord; Move this to a global variable
                 this.state = "empty";
             }
             evaluateGuess(){
                 // The guess is going to be one of three things: empty, correct, or incorrect.
 
                 // if this.guess is an empty string, the the state is empty
-                if(this.guess ==""){
+                if(this.guess =="     "){
                     this.setState("empty");
                 }else{
-                    // Determine if the letter is in the word
-                    if (this.guess=="wordle"){
+                    // Determine if the guess ins the winningWord
+                    if (this.guess==window.winnningWord){
                         // This is the correct word. 
                         console.log("mark 19: ");
                         this.setState("correct");
                     }else{
                         // The guess is incorrect
-                        this.setState("inccorrect");
+                        this.setState("incorrect");
                     }
                 }
                 return;
@@ -371,20 +418,26 @@
 
         /* Game Class**************************************************** */
         class Game{
-            constructor(name, wordle = "wordl") {
+            constructor(name, winnningWord = "wordl") {
                 this.name=name;
-                this.wordle=wordle; // wordle is my wy variable name for winning word
+                this.winnningWord=winnningWord; 
                 this.guesses = [];
+                this.keyboard = new Keyboard;
                 this.gameOver = false;
+            
             }
             
             buildGuesses(){
                 // Make 6 empty guesses
                 for (let i=1; i<7;i++){
                     let name = ("guess"+i);
-                    name = new Guess("least",i);
+                    name = new Guess("     ",i);
                     this.guesses.push(name);
                 }
+            }
+            buildKeyboard(){
+                console.log("Mark 300: this.keyboard.name: "+this.keyboard.name);
+                this.keyboard.buildRows();
             }
 
             displayBoard(){
@@ -403,8 +456,16 @@
 
                 // Now build the divs for the tiles in each row
 
+            }
+            setWinningWord(){
+                window.winningWord=this.winnningWord;
 
-
+            }
+            startGame(){
+                this.setWinningWord();
+                this.buildGuesses();
+                this.displayBoard();
+                this.buildKeyboard();
 
             }
 
@@ -449,16 +510,17 @@
         // console.log("guessDiv2: "+guessDiv2);
 
         game1= new Game("TestGame","least");
-        game1.buildGuesses();
-        game1.displayBoard();
-        console.log(game1.wordle);
+        game1.startGame();
+        // game1.buildGuesses();
+        // game1.displayBoard();
+        // console.log(winningWord);
 
-        keyboard = new Keyboard;
-        console.log("keyboard.name: "+keyboard.name);
-        keyboard.buildRows();
+        // keyboard = new Keyboard;
+        // console.log("keyboard.name: "+keyboard.name);
+        // keyboard.buildRows();
 
-        mikey = new Key("r");
-        console.log(mikey.buildKey());
+        // mikey = new Key("r");
+        // console.log(mikey.buildKey());
 
 </script>
 
@@ -480,14 +542,14 @@
             .then(response => response.json())
             .then(response => {
                 console.log(response);
-                console.log("it this a word");
+                console.log("is this a word");
                 console.log(response.result_msg)
                 display = document.getElementById("word");
                 if (response.result_msg =="Success"){
                     console.log("That is a real word");
                     // Set Inner HTML
                     
-                    display.innerHTML="Success. THat is a real word"
+                    display.innerHTML="Success. That is a real word"
                     
                 }else {
                      display.innerHTML="Sorry. That is a not a real word"
