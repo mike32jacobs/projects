@@ -255,9 +255,7 @@
             evaluateTile(){
                 // The letter is going to be one of four things: empty, absent, present, or correct
                 // if this.letter is an empty string, the the state is empty
-                console.log("mark 1: Inside the evaluate tile method");
                 if(this.letter ==""){
-                    console.log("mark 8");
                     this.setState("empty");
                 }else{
                     // Determine if the letter is in the winningWord
@@ -300,14 +298,12 @@
                 let tileDiv ="";
                 if(this.state = "empty"){
                     tileDiv = `<div class='tile' data-state='${this.state}'data-number='${this.number}'></div>`
-                    console.log("Mark 42: This is an empty tile, because it is a blank guess");
-                    console.log("mark 43: "+tileDiv);
-                    console.log("mark44: this.letter "+ this.letter);
+
                 }else{
+                    console.log("mark 45: this.letter "+ this.letter);
+
                     tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'data-number='${this.number}'>${this.letter}</div>`;
                 }
-
-
                 return tileDiv;
             }
         }
@@ -317,8 +313,16 @@
             constructor(guess="", number=1){
                 this.guess=guess;
                 this.number=number;
-                // this.winnningWord=winnningWord; Move this to a global variable
+                this.tiles=[]
                 this.state = "empty";
+            }
+            buildTiles(){
+                    // Make 5 empty tiles
+                for (let i=1; i<6;i++){
+                    let name = ("tile"+i);
+                    name = new Tile("",i);
+                    this.tiles.push(name);
+                }
             }
             evaluateGuess(){
                 // The guess is going to be one of three things: empty, correct, or incorrect.
@@ -327,7 +331,7 @@
                 if(this.guess =="     "){
                     this.setState("empty");
                 }else{
-                    // Determine if the guess ins the winningWord
+                    // Determine if the guess is the winningWord
                     if (this.guess==window.winnningWord){
                         // This is the correct word. 
                         console.log("mark 19: ");
@@ -356,25 +360,17 @@
 
                 var tilesDiv = "";
 
-
                 // Make a tile div for each letter in the guess
-                for (let i in this.guess) {
-                    let j = parseInt(i)+1;
-
-                    let letter = new Tile(this.guess[i],j);
-                    tilesDiv += letter.makeTileDiv();
-
-                    console.log("Mark 15")
-                    console.log(this.guess[i]);
-                }
-                    console.log("Mark 16; tilesDiv"+ tilesDiv);
-
+                this.tiles.forEach((tile)=>{
+                    tilesDiv+=tile.makeTileDiv();
+                });
 
                 // Make the div for the guess
                 let guessDiv = `<div class='game-row' data-state='${this.state}' data-guess='${this.guess}' data-number='${this.number}' id=guess${this.number}>`+tilesDiv+`</div>`;
- 
+
                 return guessDiv;
             }
+        
         }
         /* Keyboard Class**************************************************** */
         class Keyboard{
@@ -455,6 +451,8 @@
                 for (let i=1; i<7;i++){
                     let name = ("guess"+i);
                     name = new Guess("     ",i);
+                    // Each guess will then build five empty tiles
+                    name.buildTiles();
                     this.guesses.push(name);
                 }
             }
@@ -466,7 +464,7 @@
             }
 
             displayBoard(){
-                // This function will create guessDivs for each guess, and display them. 
+                // This function will display the guesses and tiles on the board. 
 
                 var boardDiv = document.getElementById("board");
                 // First, create six rows
@@ -490,7 +488,7 @@
                 this.setWinningWord();
                 this.buildGuesses();
                 this.displayBoard();
-                this.buildKeyboard();
+                // this.buildKeyboard();
 
             }
 
