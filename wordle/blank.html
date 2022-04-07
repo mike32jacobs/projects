@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wordle</title>
+    <script>
+            /* Keyboard Class**************************************************** */
+            class Keyboard {
+              constructor() {
+                this.name = "my-keyboard";
+                this.row1 = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
+                this.row2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
+                this.row3 = ["enter", "z", "x", "c", "v", "b", "n", "m", "delete"];
+                this.rows = [this.row1, this.row2, this.row3];
+                this.keys = [];
+              }
+              buildRows() {
+                this.rows.forEach((row, i) => {
+                  let rowDiv = `<div class='row' id='row${i}'></div>`;
+                  document.getElementById("keyboard").innerHTML += rowDiv;
+                  row.forEach((item) => {
+                    let newKey = new Key(item);
+                    let newButton = newKey.buildKey();
+                    document.getElementById("row" + i).innerHTML += newButton;
+                  });
+                });
+              }
+              buildButtons() {
+                // Add an event to each button
+                var buttons = document.getElementsByTagName("button");
+                for (let i = 0; i < buttons.length; i++) {
+                  buttons[i].addEventListener("click", pressKey());
+                }
+              }
+      buildGuesses(){
+                // Make 6 empty guesses
+                for (let i=1; i<7;i++){
+                    let name = ("guess"+i);
+                    name = new Guess("     ",i);
+                    // Each guess will then build five empty tiles
+                    name.buildTiles();
+                    this.guesses.push(name);
+                }
+
+            }
+            /* Key Class**************************************************** */
+            class Key {
+              constructor(name) {
+                this.name = name;
+                this.state = "?";
+              }
+              buildKey() {
+                let key = "";
+                // key = `<button onclick="pressKey(${this.name})" data-key='${this.name}'data-state='${this.state}'>${this.name}</button>`;
+                //or
+                key = `<button data-key='${this.name}'data-state='${this.state}'>${this.name}</button>`;
+
+                return key;
+              }
+              setState(state) {
+                // Options are present, correct or incorrect
+                this.state = state;
+              }
+              buildButtons() {
+                // Add an event to each button
+                var buttons = document.getElementsByTagName("button");
+                for (let i = 0; i < buttons.length; i++) {
+                  buttons[i].addEventListener("click", this.pressKey());
+                }
+              }
+             makeTileDiv(){
+                //Make sure the tile is evaluated
+                this.evaluateTile();
+
+                let tileDiv ="";
+                if(this.state = "empty"){
+                    tileDiv = `<div class='tile' data-state='${this.state}'data-number='${this.number}'></div>`
+
+                }else{
+                    console.log("mark 45: this.letter "+ this.letter);
+
+                    tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'data-number='${this.number}'>${this.letter}</div>`;
+                }
+                return tileDiv;
+            }
+              pressKey() {
+                console.log("You pressed the Key: ");
+              }
+            }
+
+
+
+
+
+
+
+            evaluateTile(){
+                // The letter is going to be one of four things: empty, absent, present, or correct
+                // if this.letter is an empty string, the the state is empty
+                if(this.letter ==""){
+                    this.setState("empty");
+                }else{
+                    // Determine if the letter is in the winningWord
+                    console.log("mark 19: The letter is in the winning word: "+window.winningWord.includes(this.letter));
+                    if (window.winningWord.includes(this.letter)){
+                        // The letter is in the winning word.
+                        console.log("mark 9: The letter is in the winning word");
+                        this.setState("present");
+
+                        // Now check to see if the letter is in the correct position.
+                        console.log("mark 20: this.number" + this.number);
+                        console.log("mark 21: winningWord.charAt(3) "+ winningWord.charAt(this.number-1));
+                        if (this.letter == winningWord.charAt(this.number-1)){
+                            // The letter of this tile is the same as the letter in the winning word
+                            this.setState("correct");
+
+                        }
+
+                    }else{
+                        // The letter is not in the winning word
+                        this.setState("absent");
+
+                    }
+                }
+            return;
+            }
+    </script>
+  </head>
+</html>

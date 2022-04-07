@@ -380,27 +380,12 @@
                 this.row2 =["a","s","d","f","g","h","j","k","l"];
                 this.row3=["enter","z","x","c","v","b","n","m","delete"];
                 this.rows=[this.row1, this.row2, this.row3];
+                this.keys=[]
             }
-            buildRows(){
+            buildKeys(){
 
-                this.rows.forEach((row, i)=>{
-                    let rowDiv = `<div class='row' id='row${i}'></div>`
-                    document.getElementById("keyboard").innerHTML+=rowDiv;
-                    row.forEach(item=>{
-                        let newKey = new Key(item);
-                        let newButton = newKey.buildKey()
-                        document.getElementById("row"+i).innerHTML+=newButton;
+            }
 
-                    });
-                })
-            }
-            buildButtons(){
-                // Add an event to each button
-                var buttons = document.getElementsByTagName("button");
-                for (let i = 0; i < buttons.length; i++){
-                    buttons[i].addEventListener("click", pressKey());
-                }
-            }
 
         }
         /* Key Class**************************************************** */
@@ -409,28 +394,36 @@
                 this.name=name;
                 this.state="?";
             }
-            buildKey(){
-                let key = "";
-                // key = `<button onclick="pressKey(${this.name})" data-key='${this.name}'data-state='${this.state}'>${this.name}</button>`;
-                //or 
-                key = `<button data-key='${this.name}'data-state='${this.state}'>${this.name}</button>`;
-
-            
-                return key;
-            }
+           
             setState(state){
                 // Options are present, correct or incorrect
                 this.state=state;
             }
-            buildButtons(){
-                // Add an event to each button
-                var buttons = document.getElementsByTagName("button");
-                for (let i = 0; i < buttons.length; i++){
-                    buttons[i].addEventListener("click", this.pressKey());
-                }
+            makeKeyButton(){
+                this.evaluateKey();
+                let keyButton= `<button data-key='${this.name}'data-state='${this.state}'>${this.name}</button>`;
+                
+                return keyButton; 
             }
-            pressKey(){
-                console.log("You pressed the Key: ");
+            evaluateKey(){
+                // The letter is going to be one of four things: ?, absent, present, or correct
+                // If the key has not been guessed, then the state is ?
+                // Determine if the key is in the winningWord
+                if (window.winningWord.includes(this.name)){
+                    // The letter is in the winning word.
+                    console.log("mark 9A : The key is in the winning word");
+                    this.setState("present");
+                    // Now check to see if the letter is in the correct position.
+                        console.log("mark 20a: this.number" + this.name);
+                        console.log("mark 21: winningWord.charAt(3) "+ winningWord.charAt(this.number-1));
+                        if (this.letter == winningWord.charAt(this.number-1)){
+                            // The letter of this tile is the same as the letter in the winning word
+                            this.setState("correct");
+
+                        }
+                }
+
+                return;
             }
 
         }
@@ -443,6 +436,8 @@
                 this.guesses = [];
                 this.keyboard = new Keyboard();
                 this.gameOver = false;
+                this.currentGuess=null;
+                this.currentTile=null
             
             }
             
@@ -488,9 +483,49 @@
                 this.setWinningWord();
                 this.buildGuesses();
                 this.displayBoard();
+                this.setCurrentGuess();
                 // this.buildKeyboard();
 
             }
+            evaluateGuess(userGuess){
+                // See if the guess is correct. Update the state of the guess, the tile, and the keyboard key
+
+                this.currentGuess
+
+            }
+            setCurrentGuess(){
+                if (this.currentGuess == null){
+                    // This is the beginniing of game
+                    this.currentGuess=this.guesses[0];
+                    this.currentTile=this.currentGuess.tiles[0];
+                    console.log("mark 54: this.currentGuess.guess "+this.currentGuess.guess);
+
+
+                }else{
+                    //update the current Guess 
+                    // Find the index of the current guess so we can add 1
+                    let index = this.guesses.indexOf(this.currentGuess);
+                    console.log("mark 55: index: "+index);
+
+                    this.currentGuess=this.guesses[index+1];
+                    this.currentTile=this.currentGuess.tiles[0];
+                    console.log("mark 56:  "+this.currentGuess.guess);
+                }
+                return;
+            }
+            setCurrentTile(){
+                if (this.currentTile == null){
+                    // This is the beginniing of guess
+                    this.currentTile=this.currentGuess.tiles[0];
+                }else{
+                    //update the current tile 
+                    // Find the index of the current tile so we can add 1
+                    let index = this.tiles.indexOf(this.currentGuess);
+
+                    ;
+                }
+            }
+
 
         }
         
