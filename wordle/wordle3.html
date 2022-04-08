@@ -227,7 +227,12 @@
         <div id="board"></div><!-- end board -->
       </div><!-- end board-container -->
       <div id="keyboard-container">
-        <div id="keyboard"></div><!-- end keyboard -->
+        <div id="keyboard">
+            <div class="row" id="row0"></div>
+            <div class="row" id="row1"></div>
+            <div class="row" id="row2"></div>
+
+        </div><!-- end keyboard -->
     </div><!-- end keyboard-container -->
     </div> <!-- End game-->
     
@@ -290,6 +295,10 @@
             }
             setState(state){
                 this.state=state;
+            }
+            updateTile(letter, state){
+                this.setLetter(letter);
+                this.setState(state);
             }
             makeTileDiv(rowNum){
                 //Make sure the tile is evaluated
@@ -441,11 +450,7 @@
             }
             buildKeyboard(){
                 this.keyboard = new Keyboard();
-                console.log("mark 13: Inside of buildKeyboard")
                 this.keyboard.buildKeys();
-                console.log("mark 14: this.keyboard.keys[5].name "+ this.keyboard.keys[5].name);
-
-                console.log("mark 15: this.keyboard.keys[5].name "+ this.keyboard.keys[5].name);
 
             }
 
@@ -482,13 +487,26 @@
                 // This function will display the Keys on the keyboard. 
 
                 var keyboardDiv = document.getElementById("keyboard");
-                    console.log("Mark 50: this.keyboard: "+this.keyboard);
+                var rowDiv0=document.getElementById("row0");
+                var rowDiv1=document.getElementById("row1");;
+                var rowDiv2=document.getElementById("row2");
+                // keyboardDiv.innerHTML=rowDiv0+rowDiv1+rowDiv2;
+
+
                 this.keyboard.keys.forEach(key=>{
-                    console.log("Mark 51: this.keyboard.keys[5].name: "+this.keyboard.keys[5].name);
-
                     let newButton= key.makeKeyButton();
-                    keyboardDiv.innerHTML+=newButton;
-
+                    switch(key.row){
+                    case 0:
+                        rowDiv0.innerHTML+=newButton;
+                        break;
+                    case 1:
+                        rowDiv1.innerHTML+=newButton;
+                        break;
+                    case 2:
+                        rowDiv2.innerHTML+=newButton;
+                        break;
+                    }
+                    
                 });
 
             }
@@ -518,58 +536,109 @@
                     // This is the beginniing of game
                     this.currentGuess=this.guesses[0];
                     this.currentTile=this.currentGuess.tiles[0];
-                    console.log("mark 54: this.currentGuess.guess "+this.currentGuess.guess);
-
 
                 }else{
                     //update the current Guess 
                     // Find the index of the current guess so we can add 1
                     let index = this.guesses.indexOf(this.currentGuess);
-                    console.log("mark 55: index: "+index);
 
                     this.currentGuess=this.guesses[index+1];
                     this.currentTile=this.currentGuess.tiles[0];
-                    console.log("mark 56:  "+this.currentGuess.guess);
                 }
                 return;
             }
-            setCurrentTile(){
-                if (this.currentTile == null){
-                    // This is the beginniing of guess
-                    // Code will likely never arrive here.
-                    this.currentTile=this.currentGuess.tiles[0];
-                }else{
-                    //update the current tile 
-                    // Find the index of the current tile so we can add 1
-                    let index = this.tiles.indexOf(this.currentGuess);
+            setCurrentTile(expr="initial"){
+                // Make the current guess the first, or the next or the previous tile
+                 // Find the index of the current tile so we can add 1 or subtract 1
 
-                    ;
+                let index = this.currentGuess.tiles.indexOf(this.currentTile);
+
+                switch(expr){
+                    case "initial":
+                        this.currentTile=this.currentGuess.tiles[0];
+                        break;
+                    case "next":
+                        console.log("index"+ index);
+                        if (index>4){
+                            console.log("The next empty tile is in the next guess. The current tile will not change. Press enter to check your answer")
+                        }else{
+                            this.currentTile=this.currentGuess.tiles[index+1];
+                        }
+                        // (index>=5) ? alert("Press enter to check your guess") : this.currentTile=this.currentGuess.tiles[index+1];
+                        break;
+                    case "previous":
+                        if (index==0){
+                            console.log("This is the first tile in the guess.")
+                        }else{
+                            this.currentTile=this.currentGuess.tiles[index-1];
+                        }
+                        break;
+                    case "stay":
+                        // Find the index of the current tile so we can add 1
+                        this.currentTile=this.currentTile;
+                        break;
                 }
             }
             type(dataKey){
 
                 // Check for "enter" and "delete"
                 if (dataKey=="enter"){
-                    console.log("Mark 87: You pushed enter: "+dataKey)
+                    console.log("Mark 87: You pushed enter: "+dataKey);
+                    let userWord = this.getUserWord();
+                    this.isWord(userWord);
                 }else if(dataKey=="delete"){
                     console.log("Mark 88: You pushed delete: "+dataKey)
+                    // Do the opposite of pushing a letter key
+                    // Get the current tileDiv
+                    let tileId = "row"+this.currentGuess.number+"tile"+this.currentTile.number;
+                    
+                    // remove the letter from the Div and update the state
+                    let tileDiv = document.getElementById(tileId);
+                    tileDiv.innerHTML="";
+                    tileDiv.setAttribute("data-state", "empty");
+
+                    // Now update the currentTile letter and state
+                    this.currentTile.updateTile("", "empty");
+
+
+                    (this.currentTile.number==0)? this.setCurrentTile("previous"):this.setCurrentTile("previous");
+                    console.log("mark43: this.currentTile.letter: "+this.currentTile.letter);
+
+
+
                 }else{
                     //display the letter in the current tile, and update the current tile
 
-                    // Get the current tile
+                    // Get the current tileDiv
                     let tileId = "row"+this.currentGuess.number+"tile"+this.currentTile.number;
-                    console.log("Mark 89: tileId: "+tileId);
                     
                     // Place the letter in the Div and update the state
                     let tileDiv = document.getElementById(tileId);
                     tileDiv.innerHTML=dataKey;
                     tileDiv.setAttribute("data-state", "tbd");
+
+                    // Now update the currentTile letter and state
+                    this.currentTile.updateTile(dataKey, "tbd");
+
+
+                    (this.currentTile.number==5)? this.setCurrentTile("stay"):this.setCurrentTile("next");
                     
-                    this.setCurrentTile("next")
-
-
                 }
 
+
+            }
+            getUserWord(){
+                let userWord =""
+                this.currentGuess.tiles.forEach(tile=>{
+                    userWord+=tile.letter;
+                });
+                console.log("mark 32: userWord"+userWord);
+                // Check to see that the word is 5 letters
+                if(userWord.length!=5){
+                    alert("The word must be five letters long");
+                }
+
+                return userWord;
             }
 
 
@@ -579,62 +648,14 @@
 
         function pressKey(){
             var dataKey = this.getAttribute('data-key');
-            console.log("Mark 101: data-key "+dataKey);
-
             // Send the data back to the game
             game1.type(dataKey);
         }
 
-        /* Runtime **************************************************** */
-        
-        // This will be al test code to see if I can build a bit at a time
 
-
-        // a = new Tile("a");
-        // b = new Tile("b");
-        // emptyTile = new Tile;
-        // console.log("a.state " + a.state);
-        // console.log("a.letter " + a.letter);
-        // console.log("b.state " + b.state);
-        // console.log("b.letter " + b.letter);
-        // a.evaluateTile();
-        // b.evaluateTile();
-        // console.log("a.state " + a.state);
-        // console.log("a.letter " + a.letter);
-        // console.log("b.state " + b.state);
-        // console.log("b.letter " + b.letter);
-
-        // var tileDiv1 = a.makeTileDiv();
-        // console.log("Mark 1: tileDiv1 "+ tileDiv1);
-
-        // var tileDiv2 = b.makeTileDiv();
-        // console.log("Mark 2: tileDiv2 "+ tileDiv2);
-
-        // var guessDiv = document.getElementById("guess1");
-        // guessDiv.innerHTML=tileDiv1;
-        // guessDiv.innerHTML+=tileDiv2;
-        // guessDiv.innerHTML+=tileDiv2;
-
-        // guess1 = new Guess("least", 1);
-        // console.log(guess1);
-        // console.log("Mark 11: guess1.guess " + guess1.guess);
-        // console.log("guess1.number " + guess1.number);
-        // console.log("guess1.state " + guess1.state);
-        // var guessDiv2 = guess1.makeGuessDiv();
-        // console.log("guessDiv2: "+guessDiv2);
 
         game1= new Game("TestGame","least");
         game1.startGame();
-        // game1.buildGuesses();
-        // game1.displayBoard();
-        // console.log(winningWord);
-
-        // keyboard = new Keyboard;
-        // console.log("keyboard.name: "+keyboard.name);
-        // keyboard.buildRows();
-
-        // mikey = new Key("r");
-        // console.log(mikey.buildKey());
 
 </script>
 
