@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wordle 5th Version</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style type="" text/css">
+    /* Much of the CSS in this projcet comes directly from the NYT wordle page. */
+        #board-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        #board {
+            display: grid;
+            grid-template-rows: repeat(6, 1fr);
+            grid-gap: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+            width: 350px;
+            height: 420px;
+        
+        }
+        .game-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 5px;
+        }
+
+
+        
+        .tile {
+            width: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            line-height: 2rem;
+            font-weight: bold;
+            vertical-align: middle;
+            box-sizing: border-box;
+            color: var(--tile-text-color);
+            text-transform: uppercase;
+            user-select: none;
+        }
+        .tile::before {
+            content: '';
+            display: inline-block;
+            padding-bottom: 100%;
+        }
+
+        /* Allow tiles to be smaller on small screens */
+        @media (max-height: 600px) {
+            .tile {
+            font-size: 1em;
+            line-height: 1em;
+            }
+        }
+
+        .tile[data-state='empty'] {
+            border: 2px solid var(--color-tone-4);
+        }
+        .tile[data-state='tbd'] {
+            background-color: var(--color-tone-7);
+            border: 2px solid var(--color-tone-3);
+            color: var(--color-tone-1);
+        }
+        .tile[data-state='correct'] {
+            background-color: var(--color-correct);
+        }
+        .tile[data-state='present'] {
+            background-color: var(--color-present);
+        }
+        .tile[data-state='absent'] {
+            background-color: var(--color-absent);
+        }
+
+        .tile[data-animation='pop'] {
+            animation-name: PopIn;
+            animation-duration: 100ms;
+        }
+
+       :root {
+            --color-tone-1: #000000;
+            --color-tone-2: #787c7e;
+            --color-tone-3: #878a8c;
+            --color-tone-4: #d3d6da;
+            --color-tone-5: #edeff1;
+            --color-tone-6: #f6f7f8;
+            --color-tone-7: #ffffff;
+            --color-nav-hover: #f4f4f4;
+            --opacity-50: rgba(255, 255, 255, 0.5);
+        }
+        :root{
+            --color-present: #c9b458;
+            --color-correct: #6aaa64;
+            --color-absent: #787c7e;
+            --tile-text-color: var(--color-tone-7);
+            --key-text-color: var(--color-tone-1);
+            --key-evaluated-text-color: var(--color-tone-7);
+            --key-bg: var(--color-tone-4);
+            --key-bg-present: var(--color-present);
+            --key-bg-correct: var(--color-correct);
+            --key-bg-absent: var(--color-absent);
+            --modal-content-bg: var(--color-tone-7);
+        }
+        /* Keyboard CSS taken from Wordle */
+
+        :host {
+            height: var(--keyboard-height);
+        }
+          /*#keyboard {
+           margin: 0 8px; 
+            margin: 0 auto 8px;
+            user-select: none;
+        }*/
+        #keyboard {
+            display: grid;
+            grid-template-rows: repeat(3, 1fr);
+            grid-gap: 2px;
+            padding: 2px;
+            box-sizing: border-box;
+            /* width: 350px;
+            height: 420px; */
+        
+        }
+        /* #keyboard{
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+            width: 80%;
+
+        } */
+        #keyboard-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .row {
+            display: flex;
+            width: 100%;
+            margin: 0 auto 8px;
+            /* https://stackoverflow.com/questions/46167604/ios-html-disable-double-tap-to-zoom */
+            touch-action: manipulation;
+        }
+        
+        button {
+            font-family: inherit;
+            font-weight: bold;
+            border: 0;
+            padding: 0;
+            margin: 0 6px 0 0;
+            height: 58px;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+            background-color: var(--key-bg);
+            color: var(--key-text-color);
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.3);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.fade {
+            /* transition: background-color 0.1s ease, color 0.1s ease; */
+            /* background-color: var(--color-absent); */
+            background-color: #787c7e;
+        }
+        
+        button:last-of-type {
+            margin: 0;
+        }
+        
+        .half {
+            flex: 0.5;
+        }
+        
+        .one {
+            flex: 1;
+        }
+
+        .one-and-a-half {
+            flex: 1.5;
+            font-size: 12px;
+        }
+        
+        .two {
+            flex: 2;
+        }
+
+        button[data-state='correct'] {
+            background-color: var(--key-bg-correct);
+            color: var(--key-evaluated-text-color);
+        }
+
+        button[data-state='present'] {
+            background-color: var(--key-bg-present);
+            color: var(--key-evaluated-text-color);
+        }
+
+        button[data-state='absent'] {
+            background-color: var(--key-bg-absent);
+            color: var(--key-evaluated-text-color);
+        }
+
+        .message {
+            background-color: var(--key-bg-correct);
+            color: var(--key-evaluated-text-color);
+        }
+
+  
+    </style>
+  </head>
+  <body>
+        <div class="container">
+
+        <div class="jumbotron">
+            <h1 class="title"> Wordle</h1>
+            <p>Assignment #4 Task #2: By Michael Jacobs</p>
+            <p>THIS IS VERSION 5:</p>
+            <p>This is an assignment for E-28</p>        
+        </div> 
+        <!-- End Jumbotron  -->
+        </div>
+        <!-- End Container  -->
+    <div id="game">
+      <div id="board-container">
+        <div id="board"></div><!-- end board -->
+      </div><!-- end board-container -->
+      <div id="keyboard-container">
+        <div id="keyboard">
+            <div class="row" id="row0"></div>
+            <div class="row" id="row1"></div>
+            <div class="row" id="row2"></div>
+
+        </div><!-- end keyboard -->
+    </div><!-- end keyboard-container -->
+    </div> <!-- End game-->
+    <hr>       
+    <div class="debug-info"><button type="button" dataKey="DEBUG" onclick="game1.showWinningWord()" id= "debugButton">debug mode</button></div>
+    <!-- End debug-info -->
+    <div id="winning-word"></div>
+    <div class="results-container">
+        <div class="result" id="result" style="display:none">
+            </div><!-- end results-container -->
+            <div class="btnContainer" id="new-game" style="display:none"></div>
+        </div><!-- end results-container -->
+        <div class = "message" id="message"></div>
+
+    <script>
+        // var winningWord="crazy"
+        /* Tile Class  **************************************************** */
+        class Tile{
+            constructor(letter="", number=0){
+                this.letter=letter;
+                this.number=number;
+                this.state = "empty";
+            }
+            evaluateTile(){
+                // The letter is going to be one of four things: empty, absent, present, or correct
+                // if this.letter is an empty string, the the state is empty
+                if(this.letter ==""){
+                    this.setState("empty");
+                }else{
+                    // Determine if the letter is in the winningWord
+                    console.log("mark 19: The letter is in the winning word: "+window.winningWord.includes(this.letter));
+                    if (window.winningWord.includes(this.letter)){
+                        // The letter is in the winning word.
+                        console.log("mark 9: The letter is in the winning word");
+                        this.setState("present");
+
+                        // Now check to see if the letter is in the correct position.
+                        console.log("mark 20: this.number" + this.number);
+                        console.log("mark 21: winningWord.charAt(3) "+ winningWord.charAt(this.number-1));
+                        if (this.letter == winningWord.charAt(this.number-1)){
+                            // The letter of this tile is the same as the letter in the winning word
+                            this.setState("correct");
+
+                        }
+                        
+                    }else{
+                        // The letter is not in the winning word
+                        this.setState("absent");
+
+                    }
+                }
+            return;
+            }
+            setLetter(letter){
+                this.letter=letter;
+            }
+            setNumber(number){
+                this.number=number;
+            }
+            setState(state){
+                this.state=state;
+            }
+            updateTile(letter, state){
+                this.setLetter(letter);
+                this.setState(state);
+            }
+            makeTileDiv(rowNum){
+                //Make sure the tile is evaluated
+                this.evaluateTile();
+
+                let tileDiv ="";
+                if(this.state = "empty"){
+                    tileDiv = `<div class='tile' data-state='${this.state}'data-number='${this.number}'id='row${rowNum}tile${this.number}'></div>`
+
+                }else{
+                    console.log("mark 45: this.letter "+ this.letter);
+
+                    tileDiv = `<div class='tile' data-state='${this.state}' data-letter='${this.letter}'data-number='${this.number}' id='row${rowNum}tile${this.number}'>${this.letter}</div>`;
+                }
+                return tileDiv;
+            }
+        }
+
+        /* Guess Class **************************************************** */
+            class Guess {
+            constructor(guess="", number=1){
+                this.guess=guess;
+                this.number=number;
+                this.tiles=[]
+                this.state = "empty";
+            }
+            buildTiles(){
+                    // Make 5 empty tiles
+                for (let i=1; i<6;i++){
+                    let name = ("tile"+i);
+                    name = new Tile("",i);
+                    this.tiles.push(name);
+                }
+            }
+            evaluateGuess(){
+                // The guess is going to be one of three things: empty, correct, or incorrect.
+
+                // if this.guess is an empty string, the the state is empty
+                if(this.guess =="     "){
+                    this.setState("empty");
+                }else{
+                    // Determine if the guess is the winningWord
+                    if (this.guess==window.winningWord){
+                        // This is the correct word. 
+                        console.log("mark 19: ");
+                        this.setState("correct");
+                    }else{
+                        // The guess is incorrect
+                        this.setState("incorrect");
+                    }
+                }
+                return;
+
+            }
+            setGuess(word){
+                this.guess=word;
+            }
+            setNumber(number){
+                this.number=number;
+            }
+            setState(state){
+                // Options are empty, correct or incorrect
+                this.state=state;
+            }
+            makeGuessDiv(){
+                //Make sure the guess is evaluated
+                // this.evaluateGuess();
+
+                var tilesDiv = "";
+
+                // Make a tile div for each letter in the guess
+                this.tiles.forEach((tile)=>{
+                    tilesDiv+=tile.makeTileDiv(this.number);
+                });
+
+                // Make the div for the guess
+                let guessDiv = `<div class='game-row' data-state='${this.state}' data-guess='${this.guess}' data-number='${this.number}' id=guess${this.number}>`+tilesDiv+`</div>`;
+
+                return guessDiv;
+            }
+        
+        }
+        /* Keyboard Class**************************************************** */
+        class Keyboard{
+            constructor(){
+                this.name="my-keyboard"
+                this.row1=["q","w","e","r","t","y","u","i","o","p"];
+                this.row2 =["a","s","d","f","g","h","j","k","l"];
+                this.row3=["enter","z","x","c","v","b","n","m","delete"];
+                this.rows=[this.row1, this.row2, this.row3];
+                this.keys=[];
+            }
+            buildKeys(){
+                this.rows.forEach((row, i)=>{
+                    row.forEach(item=>{
+                        let newKey = new Key(item,i);
+                        this.keys.push(newKey);
+                    });
+                })
+            }
+            makeKeyboardRowDiv(rowNum){
+                let keyboardRowDiv = `<div class="row" id="row"${rowNum}"></div>`
+                return keyboardRowDiv;
+            }
+        }
+        /* Key Class**************************************************** */
+        class Key{
+            constructor(name, row){
+                this.name=name;
+                this.state="?";
+                this.row=row;
+            }
+           
+            setState(state){
+                // Options are present, correct or incorrect
+                this.state=state;
+            }
+            makeKeyButton(){
+                let keyButton= `<button data-key='${this.name}'data-state='${this.state}' id='${this.name}Button'>${this.name}</button>`;
+                
+                return keyButton; 
+            }
+
+
+        }
+
+        /* Game Class**************************************************** */
+        class Game{
+            constructor(name, winningWord = "wordl") {
+                this.name=name;
+                this.winningWord=winningWord; 
+                this.guesses = [];
+                this.keyboard = null;
+                this.gameOver = false;
+                this.currentGuess=null;
+                this.currentTile=null
+            
+            }
+            
+            buildGuesses(){
+                // Make 6 empty guesses
+                for (let i=1; i<7;i++){
+                    let name = ("guess"+i);
+                    name = new Guess("     ",i);
+                    // Each guess will then build five empty tiles
+                    name.buildTiles();
+                    this.guesses.push(name);
+                }
+            }
+            buildKeyboard(){
+                this.keyboard = new Keyboard();
+                this.keyboard.buildKeys();
+
+            }
+
+            buildButtonEvents(){
+                // Add an event to each button
+                var buttons = document.getElementsByTagName("button");
+                for (let i = 0; i < buttons.length; i++){
+                    buttons[i].addEventListener("click", pressKey);
+                }
+                //remove the event from the debug button
+                // This is a hack that could be handled better
+                let debugBtn = document.getElementById("debugButton");
+                debugBtn.removeEventListener("click", pressKey);
+            }
+            removeButtonEvents(){
+                // Add an event to each button
+                var buttons = document.getElementsByTagName("button");
+                for (let i = 0; i < buttons.length; i++){
+                    buttons[i].removeEventListener("click", pressKey);
+                }
+            }
+
+            displayBoard(){
+                // This function will display the guesses and tiles on the board. 
+
+                var boardDiv = document.getElementById("board");
+                // First, create six rows
+                let guessesDiv="";
+                // Get the Div for each guess
+                for (let i=0; i<6;i++){
+                    guessesDiv +=this.guesses[i].makeGuessDiv();
+                }
+
+                // Make the div for the guesses
+                boardDiv.innerHTML = guessesDiv;
+
+                // Now build the divs for the tiles in each row
+
+            }
+            displayKeyboard(){
+                // This function will display the Keys on the keyboard. 
+
+                var keyboardDiv = document.getElementById("keyboard");
+                var rowDiv0=document.getElementById("row0");
+                var rowDiv1=document.getElementById("row1");;
+                var rowDiv2=document.getElementById("row2");
+                // keyboardDiv.innerHTML=rowDiv0+rowDiv1+rowDiv2;
+
+
+                this.keyboard.keys.forEach(key=>{
+                    let newButton= key.makeKeyButton();
+                    switch(key.row){
+                    case 0:
+                        rowDiv0.innerHTML+=newButton;
+                        break;
+                    case 1:
+                        rowDiv1.innerHTML+=newButton;
+                        break;
+                    case 2:
+                        rowDiv2.innerHTML+=newButton;
+                        break;
+                    }
+                    
+                });
+
+            }
+            async getWinningWord(){
+                let randomWords= await getRandomWord();
+                return randomWords[Math.floor(Math.random()*randomWords.length)]
+            }
+            async setWinningWord(){
+                this.winningWord = await this.getWinningWord()
+                console.log("mark 99: this.winningWord"+ this.winningWord)
+                window.winningWord=this.winningWord;
+
+            }
+            showWinningWord(){
+                let displayDiv=document.getElementById("winning-word");
+                displayDiv.innerHTML = this.winningWord;
+            }
+            startGame(){
+                // let word = this.getWinningWord();
+                // console.log("mark 14: "+word);
+                this.setWinningWord();
+                this.buildGuesses();
+                this.displayBoard();
+                this.buildKeyboard();
+                this.displayKeyboard();
+                this.buildButtonEvents()
+                this.setCurrentGuess();
+
+            }
+            endGame(result){
+                // The game is over. Disable the buttons. Send a message to the user. 
+                this.removeButtonEvents();
+                let userMessage ="I am very sorry that you lost the game.";
+                if (result =="correct"){
+                    userMessage="Congratulations. You won the game."
+                }
+                let messageDiv= document.getElementById("result");
+                messageDiv.innerHTML=userMessage;
+                console.log("Mark 123");
+
+                //Display a play again button
+                let btnDiv = document.getElementById("new-game")
+                let newGameBtn = this.makeNewGameBtn();
+                btnDiv.innerHTML = newGameBtn;
+
+                messageDiv.style.display = 'inline-block';
+                btnDiv.style.display = 'inline-block';
+                 
+                return alert(userMessage);
+
+
+            }
+            makeNewGameBtn() {
+
+                let gameName = (this.name);
+                // let btnString = ('<button type="button" onclick="' + gameName + '.newGame()">New Game</button>');
+                let btnString = ('<button type="button" onclick="newGame()">New Game</button>');
+
+
+                return btnString;
+            }
+
+
+            setCurrentGuess(expr="initial"){
+                // Make the current guess the first, or the next or the previous tile
+
+                // Find the index of the current guess so we can add 1 or subtract 1
+
+                let index = this.guesses.indexOf(this.currentGuess);
+                switch(expr){
+                    case "initial":
+                        this.currentGuess=this.guesses[0];
+                        this.currentTile=this.currentGuess.tiles[0];
+                        console.log("Mark 10: Initial setup");
+                        break;
+                    case "next":
+                        if (index>5){
+                            console.log("Mark 11: That is the last guess. The game is over.")
+                        }else{
+                            this.currentGuess=this.guesses[index+1];
+                            this.currentTile=this.currentGuess.tiles[0];
+                        }                        
+                        
+                        break;
+                    case "previous":
+                        if (index==0){
+                            console.log("Mark 12: This is the first guess in the game. You can't go back any further")
+                        }else{
+                            this.currentGuess=this.guesses[index-1];
+                        }
+                        break;                        
+                        break;
+                    case "stay":
+                        // Find the index of the current tile so we can add 1
+                        this.currentGuess=this.currentGuess;
+                        break;
+                }
+                return;
+            }
+            setCurrentTile(expr="initial"){
+                // Make the current tile the first, or the next or the previous tile
+                 // Find the index of the current tile so we can add 1 or subtract 1
+
+                let index = this.currentGuess.tiles.indexOf(this.currentTile);
+
+                switch(expr){
+                    case "initial":
+                        this.currentTile=this.currentGuess.tiles[0];
+                        break;
+                    case "next":
+                        if (index>4){
+                            console.log("The next empty tile is in the next guess. The current tile will not change. Press enter to check your answer")
+                        }else{
+                            this.currentTile=this.currentGuess.tiles[index+1];
+                        }
+                        // (index>=5) ? alert("Press enter to check your guess") : this.currentTile=this.currentGuess.tiles[index+1];
+                        break;
+                    case "previous":
+                        if (index==0){
+                            console.log("This is the first tile in the guess. You can't delete an empty tile")
+                        }else{
+                            this.currentTile=this.currentGuess.tiles[index-1];
+                        }
+                        break;
+                    case "stay":
+                        // Find the index of the current tile so we can add 1
+                        this.currentTile=this.currentTile;
+                        break;
+                }
+            }
+            async type(dataKey){
+
+                // Check for "enter" and "delete"
+                if (dataKey=="enter"){
+                    let userWord = this.getUserWord();
+                    var value = await isWord(userWord); 
+                    console.log("Mark 100: value "+value); 
+                    
+                    if (value){
+                        this.evaluateGuess(userWord);
+                    };
+                }else if(dataKey=="delete"){
+                    console.log("Mark 88: You pushed delete: "+dataKey)
+                    // Do the opposite of pushing a letter key
+                    // Get the current tileDiv
+                    let tileId = "row"+this.currentGuess.number+"tile"+this.currentTile.number;
+                    
+                    // remove the letter from the Div and update the state
+                    let tileDiv = document.getElementById(tileId);
+                    tileDiv.innerHTML="";
+                    tileDiv.setAttribute("data-state", "empty");
+
+                    // Now update the currentTile letter and state
+                    this.currentTile.updateTile("", "empty");
+
+
+                    (this.currentTile.number==0)? this.setCurrentTile("previous"):this.setCurrentTile("previous");
+                    console.log("mark43: this.currentTile.letter: "+this.currentTile.letter);
+
+
+
+                }else if(dataKey=="DEBUG") {
+                    // No need to do anything here.
+                    console.log("Mark 800 You hit the debug key");
+                    pass; //I have never used a pass statement. 
+                }else{
+                    //display the letter in the current tile, and update the current tile
+
+                    // Get the current tileDiv
+                    let tileId = "row"+this.currentGuess.number+"tile"+this.currentTile.number;
+                    
+                    // Place the letter in the Div and update the state
+                    let tileDiv = document.getElementById(tileId);
+                    tileDiv.innerHTML=dataKey;
+                    tileDiv.setAttribute("data-state", "tbd");
+
+                    // Now update the currentTile letter and state
+                    this.currentTile.updateTile(dataKey, "tbd");
+
+
+                    (this.currentTile.number==5)? this.setCurrentTile("stay"):this.setCurrentTile("next");
+                    
+                }
+
+
+            }
+            getUserWord(){
+                let userWord =""
+                this.currentGuess.tiles.forEach(tile=>{
+                    userWord+=tile.letter;
+                });
+                console.log("mark 32: userWord"+userWord);
+                // Check to see that the word is 5 letters
+                if(userWord.length!=5){
+                    alert("The word must be five letters long");
+                }
+
+                return userWord;
+            }
+            evaluateGuess(userWord){
+                let message ="next guess"
+                // set the current guess to user word. 
+                this.currentGuess.guess = userWord;
+
+                console.log("mark 1:this.currentGuess.guess "+this.currentGuess.guess);
+                console.log("mark 2: this.winningWord "+this.winningWord);
+
+                // initialize variable that will be used to update row div, and the guess object
+                let dataState ="empty";
+                let dataGuess = this.currentGuess.guess;
+                let divId = "guess"+this.currentGuess.number;
+                let rowDiv = document.getElementById(divId);
+
+                console.log("mark 74: (this.guess == this.winningWord)");
+
+                console.log((this.currentGuess.guess == this.winningWord));
+                // Check to see if the guess was correct. 
+                if(this.currentGuess.guess == this.winningWord){
+                    message = "mark 77: Game is over. ";
+                    console.log(message);
+                    dataState="correct";
+                }else{
+                    message = "mark 78: That is not the correct answer ";
+                    console.log(message);
+                    dataState="incorrect";
+                }
+
+                //Update the game-row
+                rowDiv.setAttribute("data-state", dataState);
+                rowDiv.setAttribute("data-guess", dataGuess);
+
+                //Now update each tile and tile Div
+                this.currentGuess.tiles.forEach(tile=>{
+                    this.evaluateTile(tile)
+                });
+
+                if(dataState == "correct"){
+                    this.endGame(dataState);
+                }else{
+                    // Check to see if that was the last guess
+                    if (this.currentGuess==this.guesses[5]){
+                        //that is the last guess
+                        this.endGame(dataState);
+                    }else{
+                        this.setCurrentGuess("next");
+
+                    }
+                }
+                
+                return;
+            }
+            evaluateTile(tile){
+                // The letter is going to be one of four things: empty, absent, present, or correct. This function will update the tile object and the tile display
+
+                // Also update the Keyboard display
+
+                // initialize variable that will be used to update row div, and the guess object
+                let dataState ="tbd";
+                let userWord = this.currentGuess.guess;
+                let divId = "row"+this.currentGuess.number+"tile"+tile.number;
+                let tileDiv = document.getElementById(divId);
+
+                // Determine if the letter is in the winningWord
+                console.log(this.winningWord.includes(tile.letter));
+
+
+                // if this.letter is an empty string, the the state is empty
+                if(tile.letter ==""){
+                    tile.setState("empty");
+                }else{
+                    
+                    if (this.winningWord.includes(tile.letter)){
+                        // The letter is in the winning word.
+                        console.log("mark 9: The letter is in the winning word");
+                        // Update the object
+                        tile.setState("present");
+                        
+                        // Now check to see if the letter is in the correct position.
+                        console.log("mark 20: tile.number" + (tile.letter == this.winningWord.charAt(tile.number -1)));
+                        if (tile.letter == this.winningWord.charAt(tile.number -1)){
+                            // The letter of this tile is the same as the letter in the winning word
+                            tile.setState("correct");
+                        }                       
+                    }else{
+                        // The letter is not in the winning word
+                        tile.setState("absent");
+
+                    }
+                    dataState=tile.state;
+                    // Update the tile display
+                    tileDiv.setAttribute("data-state", dataState);
+
+                    //Update the display of the key in the keyboard
+                    let buttonId = tile.letter+"Button";
+                    let keyButton = document.getElementById(buttonId);
+                    keyButton.setAttribute("data-state", dataState);
+
+
+                }
+            return;
+            }
+
+
+        }
+        
+        /* Utility Functions **************************************************** */
+
+        function pressKey(){
+            var dataKey = this.getAttribute('data-key');
+            // Send the data back to the game
+            game1.type(dataKey);
+        }
+        function newGame(){
+            // This function will clear the 
+            game2 = new Game("anotherGame", "crazy");
+            game2.startGame();
+        }
+        async function getRandomWord(){
+            var words=[];
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Host': 'random-words5.p.rapidapi.com',
+                    'X-RapidAPI-Key': 'e5cfbfa955msh7a91b25079074c5p1f0709jsn4a938e9d07cc'
+                }
+            };
+
+            await fetch('https://random-words5.p.rapidapi.com/getMultipleRandom?count=20&wordLength=5', options)
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response)
+                    words = response;
+
+                })
+                .catch(err => console.error(err));
+                return words;
+        }
+        async function isWord(userWord){
+        /* API **************************************************** */
+            var isItAWord = null;
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Host': 'twinword-word-graph-dictionary.p.rapidapi.com',
+                    'X-RapidAPI-Key': 'e5cfbfa955msh7a91b25079074c5p1f0709jsn4a938e9d07cc'
+
+                }
+            };
+
+            await fetch('https://twinword-word-graph-dictionary.p.rapidapi.com/example/?entry='+userWord, options)
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response.result_msg)
+                    // display = document.getElementById("message");
+                    if (response.result_msg =="Success"){
+                        console.log("That is a real word");
+                        
+                        // Set Inner HTML
+                        
+                        // display.innerHTML="Mark 200 Success. That is a real word: "+userWord;
+                        isItAWord = true;
+
+                    }else {
+                        // display.innerHTML="Mark 300 Sorry. That is a not a real word"
+                        alert("That word is not in the dictionary");
+                        isItAWord= false;
+                    }
+                }
+                )
+                .catch(err => console.error(err));
+                return isItAWord;
+
+        }
+
+
+        game1= new Game("TestGame");
+        game1.startGame();
+
+</script>
+
+
+
+    <script>
+
+    </script>
+  </body>
+</html>
