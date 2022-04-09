@@ -251,7 +251,15 @@
         </div><!-- end keyboard -->
     </div><!-- end keyboard-container -->
     </div> <!-- End game-->
-    <hr>
+    <hr>       
+    <div class="debug-info"><button type="button" onclick="game1.showWinningWord()">debug mode</button></div>
+    <!-- End debug-info -->
+    <div id="winning-word"></div>
+    <div class="results-container">
+        <div class="result" id="result" style="display:none">
+            </div><!-- end results-container -->
+            <div class="btnContainer" id="new-game" style="display:none"></div>
+        </div><!-- end results-container -->
         <div class = "message" id="message"></div>
 
     <script>
@@ -524,6 +532,10 @@
                 window.winningWord=this.winningWord;
 
             }
+            showWinningWord(){
+                let displayDiv=document.getElementById("winning-word");
+                displayDiv.innerHTML = this.winningWord;
+            }
             startGame(){
                 this.setWinningWord();
                 this.buildGuesses();
@@ -541,13 +553,33 @@
                 if (result =="correct"){
                     userMessage="Congratulations. You won the game."
                 }
-                let messageDiv= document.getElementById("message");
+                let messageDiv= document.getElementById("result");
                 messageDiv.innerHTML=userMessage;
                 console.log("Mark 123");
+
+                //Display a play again button
+                let btnDiv = document.getElementById("new-game")
+                let newGameBtn = this.makeNewGameBtn();
+                btnDiv.innerHTML = newGameBtn;
+
+                messageDiv.style.display = 'inline-block';
+
+                btnDiv.style.display = 'inline-block';
                  
                 return alert(userMessage);
 
+
             }
+            makeNewGameBtn() {
+
+                let gameName = (this.name);
+                // let btnString = ('<button type="button" onclick="' + gameName + '.newGame()">New Game</button>');
+                let btnString = ('<button type="button" onclick="newGame()">New Game</button>');
+
+
+                return btnString;
+            }
+
 
             setCurrentGuess(expr="initial"){
                 // Make the current guess the first, or the next or the previous tile
@@ -793,6 +825,10 @@
             var dataKey = this.getAttribute('data-key');
             // Send the data back to the game
             game1.type(dataKey);
+        }
+        function newGame(){
+            game2 = new Game("anotherGame", "crazy");
+            game2.startGame();
         }
         async function isWord(userWord){
         /* API **************************************************** */
