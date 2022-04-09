@@ -1,43 +1,15 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@mike32jacobs 
-mike32jacobs
-/
-projects
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-projects/wordle/wordle3.html
-@mike32jacobs
-mike32jacobs endGame() method created
-Latest commit 8f730de 1 hour ago
- History
- 1 contributor
-816 lines (695 sloc)  28.8 KB
-   
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wordle</title>
+    <title>Wordle 4th Version</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style type="" text/css">
+    /* Much of the CSS in this projcet comes directly from the NYT wordle page. */
         #board-container {
             display: flex;
             justify-content: center;
@@ -164,6 +136,7 @@ Latest commit 8f730de 1 hour ago
             flex-grow: 1;
             overflow: hidden;
             width: 80%;
+
         } */
         #keyboard-container{
             display: flex;
@@ -246,10 +219,26 @@ Latest commit 8f730de 1 hour ago
             color: var(--key-evaluated-text-color);
         }
 
+        .message {
+            background-color: var(--key-bg-correct);
+            color: var(--key-evaluated-text-color);
+        }
+
   
     </style>
   </head>
   <body>
+        <div class="container">
+
+        <div class="jumbotron">
+            <h1 class="title"> Wordle</h1>
+            <p>Assignment #4 Task #2: By Michael Jacobs</p>
+            <p>THIS IS VERSION 3: I am writing a Game class.</p>
+            <p>This is an assignment for E-28</p>        
+        </div> 
+        <!-- End Jumbotron  -->
+        </div>
+        <!-- End Container  -->
     <div id="game">
       <div id="board-container">
         <div id="board"></div><!-- end board -->
@@ -263,21 +252,19 @@ Latest commit 8f730de 1 hour ago
         </div><!-- end keyboard -->
     </div><!-- end keyboard-container -->
     </div> <!-- End game-->
-    
-    <hr>
-    <div class ="row-container" id="my-row"></div>
-        <hr>
-    <h1> This is the wordle word</h1>
-    <div id="word"></div>
-    <div class=game-row id="guess1"></div>
-    <div class=game-row id="guess2"></div>
-    <div class=game-row id="guess3"></div>
-    <div class=game-row id="guess4"></div>
-    <div class=game-row id="guess5"></div>
-    <div class=game-row id="guess6"></div>
+    <hr>       
+    <div class="debug-info"><button type="button" dataKey="DEBUG" onclick="game1.showWinningWord()" id= "debugButton">debug mode</button></div>
+    <!-- End debug-info -->
+    <div id="winning-word"></div>
+    <div class="results-container">
+        <div class="result" id="result" style="display:none">
+            </div><!-- end results-container -->
+            <div class="btnContainer" id="new-game" style="display:none"></div>
+        </div><!-- end results-container -->
+        <div class = "message" id="message"></div>
 
     <script>
-        var winningWord="crazy"
+        // var winningWord="crazy"
         /* Tile Class  **************************************************** */
         class Tile{
             constructor(letter="", number=0){
@@ -369,7 +356,7 @@ Latest commit 8f730de 1 hour ago
                     this.setState("empty");
                 }else{
                     // Determine if the guess is the winningWord
-                    if (this.guess==window.winnningWord){
+                    if (this.guess==window.winningWord){
                         // This is the correct word. 
                         console.log("mark 19: ");
                         this.setState("correct");
@@ -445,7 +432,7 @@ Latest commit 8f730de 1 hour ago
                 this.state=state;
             }
             makeKeyButton(){
-                let keyButton= `<button data-key='${this.name}'data-state='${this.state}'>${this.name}</button>`;
+                let keyButton= `<button data-key='${this.name}'data-state='${this.state}' id='${this.name}Button'>${this.name}</button>`;
                 
                 return keyButton; 
             }
@@ -455,9 +442,9 @@ Latest commit 8f730de 1 hour ago
 
         /* Game Class**************************************************** */
         class Game{
-            constructor(name, winnningWord = "wordl") {
+            constructor(name, winningWord = "wordl") {
                 this.name=name;
-                this.winnningWord=winnningWord; 
+                this.winningWord=winningWord; 
                 this.guesses = [];
                 this.keyboard = null;
                 this.gameOver = false;
@@ -488,6 +475,10 @@ Latest commit 8f730de 1 hour ago
                 for (let i = 0; i < buttons.length; i++){
                     buttons[i].addEventListener("click", pressKey);
                 }
+                //remove the event from the debug button
+                // This is a hack that could be handled better
+                let debugBtn = document.getElementById("debugButton");
+                debugBtn.removeEventListener("click", pressKey);
             }
             removeButtonEvents(){
                 // Add an event to each button
@@ -541,12 +532,23 @@ Latest commit 8f730de 1 hour ago
                 });
 
             }
- 
-            setWinningWord(){
-                window.winningWord=this.winnningWord;
+            async getWinningWord(){
+                let randomWords= await getRandomWord();
+                return randomWords[Math.floor(Math.random()*randomWords.length)]
+            }
+            async setWinningWord(){
+                this.winningWord = await this.getWinningWord()
+                console.log("mark 99: this.winningWord"+ this.winningWord)
+                window.winningWord=this.winningWord;
 
             }
+            showWinningWord(){
+                let displayDiv=document.getElementById("winning-word");
+                displayDiv.innerHTML = this.winningWord;
+            }
             startGame(){
+                // let word = this.getWinningWord();
+                // console.log("mark 14: "+word);
                 this.setWinningWord();
                 this.buildGuesses();
                 this.displayBoard();
@@ -559,14 +561,36 @@ Latest commit 8f730de 1 hour ago
             endGame(result){
                 // The game is over. Disable the buttons. Send a message to the user. 
                 this.removeButtonEvents();
-                let message ="I am very sorry that you lost the game.";
+                let userMessage ="I am very sorry that you lost the game.";
                 if (result =="correct"){
-                    message="Congratulations. You won the game."
+                    userMessage="Congratulations. You won the game."
                 }
+                let messageDiv= document.getElementById("result");
+                messageDiv.innerHTML=userMessage;
+                console.log("Mark 123");
+
+                //Display a play again button
+                let btnDiv = document.getElementById("new-game")
+                let newGameBtn = this.makeNewGameBtn();
+                btnDiv.innerHTML = newGameBtn;
+
+                messageDiv.style.display = 'inline-block';
+                btnDiv.style.display = 'inline-block';
                  
-                return alert(message);
+                return alert(userMessage);
+
 
             }
+            makeNewGameBtn() {
+
+                let gameName = (this.name);
+                // let btnString = ('<button type="button" onclick="' + gameName + '.newGame()">New Game</button>');
+                let btnString = ('<button type="button" onclick="newGame()">New Game</button>');
+
+
+                return btnString;
+            }
+
 
             setCurrentGuess(expr="initial"){
                 // Make the current guess the first, or the next or the previous tile
@@ -666,6 +690,10 @@ Latest commit 8f730de 1 hour ago
 
 
 
+                }else if(dataKey=="DEBUG") {
+                    // No need to do anything here.
+                    console.log("Mark 800 You hit the debug key");
+                    pass; //I have never used a pass statement. 
                 }else{
                     //display the letter in the current tile, and update the current tile
 
@@ -705,14 +733,20 @@ Latest commit 8f730de 1 hour ago
                 // set the current guess to user word. 
                 this.currentGuess.guess = userWord;
 
+                console.log("mark 1:this.currentGuess.guess "+this.currentGuess.guess);
+                console.log("mark 2: this.winningWord "+this.winningWord);
+
                 // initialize variable that will be used to update row div, and the guess object
                 let dataState ="empty";
                 let dataGuess = this.currentGuess.guess;
                 let divId = "guess"+this.currentGuess.number;
                 let rowDiv = document.getElementById(divId);
 
+                console.log("mark 74: (this.guess == this.winningWord)");
+
+                console.log((this.currentGuess.guess == this.winningWord));
                 // Check to see if the guess was correct. 
-                if(this.guess == this.winningWord){
+                if(this.currentGuess.guess == this.winningWord){
                     message = "mark 77: Game is over. ";
                     console.log(message);
                     dataState="correct";
@@ -734,13 +768,22 @@ Latest commit 8f730de 1 hour ago
                 if(dataState == "correct"){
                     this.endGame(dataState);
                 }else{
-                    this.setCurrentGuess("next");
+                    // Check to see if that was the last guess
+                    if (this.currentGuess==this.guesses[5]){
+                        //that is the last guess
+                        this.endGame(dataState);
+                    }else{
+                        this.setCurrentGuess("next");
+
+                    }
                 }
                 
                 return;
             }
             evaluateTile(tile){
                 // The letter is going to be one of four things: empty, absent, present, or correct. This function will update the tile object and the tile display
+
+                // Also update the Keyboard display
 
                 // initialize variable that will be used to update row div, and the guess object
                 let dataState ="tbd";
@@ -749,7 +792,7 @@ Latest commit 8f730de 1 hour ago
                 let tileDiv = document.getElementById(divId);
 
                 // Determine if the letter is in the winningWord
-                console.log(this.winnningWord.includes(tile.letter));
+                console.log(this.winningWord.includes(tile.letter));
 
 
                 // if this.letter is an empty string, the the state is empty
@@ -757,15 +800,15 @@ Latest commit 8f730de 1 hour ago
                     tile.setState("empty");
                 }else{
                     
-                    if (this.winnningWord.includes(tile.letter)){
+                    if (this.winningWord.includes(tile.letter)){
                         // The letter is in the winning word.
                         console.log("mark 9: The letter is in the winning word");
                         // Update the object
                         tile.setState("present");
                         
                         // Now check to see if the letter is in the correct position.
-                        console.log("mark 20: tile.number" + (tile.letter == this.winnningWord.charAt(tile.number -1)));
-                        if (tile.letter == this.winnningWord.charAt(tile.number -1)){
+                        console.log("mark 20: tile.number" + (tile.letter == this.winningWord.charAt(tile.number -1)));
+                        if (tile.letter == this.winningWord.charAt(tile.number -1)){
                             // The letter of this tile is the same as the letter in the winning word
                             tile.setState("correct");
                         }                       
@@ -777,6 +820,13 @@ Latest commit 8f730de 1 hour ago
                     dataState=tile.state;
                     // Update the tile display
                     tileDiv.setAttribute("data-state", dataState);
+
+                    //Update the display of the key in the keyboard
+                    let buttonId = tile.letter+"Button";
+                    let keyButton = document.getElementById(buttonId);
+                    keyButton.setAttribute("data-state", dataState);
+
+
                 }
             return;
             }
@@ -790,6 +840,31 @@ Latest commit 8f730de 1 hour ago
             var dataKey = this.getAttribute('data-key');
             // Send the data back to the game
             game1.type(dataKey);
+        }
+        function newGame(){
+            // This function will clear the 
+            game2 = new Game("anotherGame", "crazy");
+            game2.startGame();
+        }
+        async function getRandomWord(){
+            var words=[];
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Host': 'random-words5.p.rapidapi.com',
+                    'X-RapidAPI-Key': 'e5cfbfa955msh7a91b25079074c5p1f0709jsn4a938e9d07cc'
+                }
+            };
+
+            await fetch('https://random-words5.p.rapidapi.com/getMultipleRandom?count=20&wordLength=5', options)
+                .then(response => response.json())
+                .then(response => {
+                    console.log(response)
+                    words = response;
+
+                })
+                .catch(err => console.error(err));
+                return words;
         }
         async function isWord(userWord){
         /* API **************************************************** */
@@ -807,17 +882,17 @@ Latest commit 8f730de 1 hour ago
                 .then(response => response.json())
                 .then(response => {
                     console.log(response.result_msg)
-                    display = document.getElementById("word");
+                    // display = document.getElementById("message");
                     if (response.result_msg =="Success"){
                         console.log("That is a real word");
                         
                         // Set Inner HTML
                         
-                        display.innerHTML="Mark 200 Success. That is a real word: "+userWord;
+                        // display.innerHTML="Mark 200 Success. That is a real word: "+userWord;
                         isItAWord = true;
 
                     }else {
-                        display.innerHTML="Mark 300 Sorry. That is a not a real word"
+                        // display.innerHTML="Mark 300 Sorry. That is a not a real word"
                         alert("That word is not in the dictionary");
                         isItAWord= false;
                     }
@@ -829,8 +904,7 @@ Latest commit 8f730de 1 hour ago
         }
 
 
-
-        game1= new Game("TestGame","least");
+        game1= new Game("TestGame");
         game1.startGame();
 
 </script>
@@ -842,16 +916,3 @@ Latest commit 8f730de 1 hour ago
     </script>
   </body>
 </html>
-© 2022 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
