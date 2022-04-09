@@ -579,13 +579,17 @@
                         break;
                 }
             }
-            type(dataKey){
+            async type(dataKey){
 
                 // Check for "enter" and "delete"
                 if (dataKey=="enter"){
-                    console.log("Mark 87: You pushed enter: "+dataKey);
                     let userWord = this.getUserWord();
-                    isWord(userWord);
+                    var value = await isWord(userWord); 
+                    console.log("Mark 100: value "+value); 
+                    
+                    if (value){
+                        this.evaluateGuess(userWord);
+                    };
                 }else if(dataKey=="delete"){
                     console.log("Mark 88: You pushed delete: "+dataKey)
                     // Do the opposite of pushing a letter key
@@ -640,6 +644,22 @@
 
                 return userWord;
             }
+            evaluateGuess(userWord){
+                let message ="next guess"
+                // set the current guess to user word. 
+                this.guess = userWord;
+                //If the guess is correct, the game is over. Update tile-states and keyboard data-states. Also update the displays
+                if(this.guess == this.winningWord){
+                    message = "mark 77: Game is over. The winning word ";
+                    console.log(message);
+                }
+                // Update tile-states and keyboard data-states. Also update the displays
+
+                // If the guess is incorrect, set current guess()
+
+                // SetCurrent guess(next)
+                // set the current tile to first tile 
+            }
 
 
         }
@@ -653,7 +673,7 @@
         }
         async function isWord(userWord){
         /* API **************************************************** */
-
+            var isItAWord = null;
             const options = {
                 method: 'GET',
                 headers: {
@@ -673,17 +693,18 @@
                         
                         // Set Inner HTML
                         
-                        display.innerHTML="Success. That is a real word"
-                        return true;
+                        display.innerHTML="Mark 200 Success. That is a real word: "+userWord;
+                        isItAWord = true;
 
                     }else {
-                        display.innerHTML="Sorry. That is a not a real word"
+                        display.innerHTML="Mark 300 Sorry. That is a not a real word"
                         alert("That word is not in the dictionary");
-                        return false;
+                        isItAWord= false;
                     }
                 }
                 )
                 .catch(err => console.error(err));
+                return isItAWord;
 
         }
 
