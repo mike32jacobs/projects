@@ -423,7 +423,7 @@
                 this.state=state;
             }
             makeKeyButton(){
-                let keyButton= `<button data-key='${this.name}'data-state='${this.state}'>${this.name}</button>`;
+                let keyButton= `<button data-key='${this.name}'data-state='${this.state}' id='${this.name}Button'>${this.name}</button>`;
                 
                 return keyButton; 
             }
@@ -736,6 +736,8 @@
             evaluateTile(tile){
                 // The letter is going to be one of four things: empty, absent, present, or correct. This function will update the tile object and the tile display
 
+                // Also update the Keyboard display
+
                 // initialize variable that will be used to update row div, and the guess object
                 let dataState ="tbd";
                 let userWord = this.currentGuess.guess;
@@ -771,6 +773,13 @@
                     dataState=tile.state;
                     // Update the tile display
                     tileDiv.setAttribute("data-state", dataState);
+
+                    //Update the display of the key in the keyboard
+                    let buttonId = tile.letter+"Button";
+                    let keyButton = document.getElementById(buttonId);
+                    keyButton.setAttribute("data-state", dataState);
+
+
                 }
             return;
             }
