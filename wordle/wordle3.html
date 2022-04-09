@@ -454,15 +454,18 @@
 
             }
 
-            // buildRows(){
-            //     console.log("Mark 77: Inside of buildRows");
-            //     return;
-            // }
             buildButtonEvents(){
                 // Add an event to each button
                 var buttons = document.getElementsByTagName("button");
                 for (let i = 0; i < buttons.length; i++){
                     buttons[i].addEventListener("click", pressKey);
+                }
+            }
+            removeButtonEvents(){
+                // Add an event to each button
+                var buttons = document.getElementsByTagName("button");
+                for (let i = 0; i < buttons.length; i++){
+                    buttons[i].removeEventListener("click", pressKey);
                 }
             }
 
@@ -525,30 +528,56 @@
                 this.setCurrentGuess();
 
             }
-            evaluateGuess(userGuess){
-                // See if the guess is correct. Update the state of the guess, the tile, and the keyboard key
-
-                this.currentGuess
+            endGame(result){
+                // The game is over. Disable the buttons. Send a message to the user. 
+                this.removeButtonEvents();
+                let message ="I am very sorry that you lost the game.";
+                if (result =="correct"){
+                    message="Congratulations. You won the game."
+                }
+                 
+                return alert(message);
 
             }
-            setCurrentGuess(){
-                if (this.currentGuess == null){
-                    // This is the beginniing of game
-                    this.currentGuess=this.guesses[0];
-                    this.currentTile=this.currentGuess.tiles[0];
 
-                }else{
-                    //update the current Guess 
-                    // Find the index of the current guess so we can add 1
-                    let index = this.guesses.indexOf(this.currentGuess);
+            setCurrentGuess(expr="initial"){
+                // Make the current guess the first, or the next or the previous tile
 
-                    this.currentGuess=this.guesses[index+1];
-                    this.currentTile=this.currentGuess.tiles[0];
+                // Find the index of the current guess so we can add 1 or subtract 1
+
+                let index = this.guesses.indexOf(this.currentGuess);
+                switch(expr){
+                    case "initial":
+                        this.currentGuess=this.guesses[0];
+                        this.currentTile=this.currentGuess.tiles[0];
+                        console.log("Mark 10: Initial setup");
+                        break;
+                    case "next":
+                        if (index>5){
+                            console.log("Mark 11: That is the last guess. The game is over.")
+                        }else{
+                            this.currentGuess=this.guesses[index+1];
+                            this.currentTile=this.currentGuess.tiles[0];
+                        }                        
+                        
+                        break;
+                    case "previous":
+                        if (index==0){
+                            console.log("Mark 12: This is the first guess in the game. You can't go back any further")
+                        }else{
+                            this.currentGuess=this.guesses[index-1];
+                        }
+                        break;                        
+                        break;
+                    case "stay":
+                        // Find the index of the current tile so we can add 1
+                        this.currentGuess=this.currentGuess;
+                        break;
                 }
                 return;
             }
             setCurrentTile(expr="initial"){
-                // Make the current guess the first, or the next or the previous tile
+                // Make the current tile the first, or the next or the previous tile
                  // Find the index of the current tile so we can add 1 or subtract 1
 
                 let index = this.currentGuess.tiles.indexOf(this.currentTile);
@@ -558,7 +587,6 @@
                         this.currentTile=this.currentGuess.tiles[0];
                         break;
                     case "next":
-                        console.log("index"+ index);
                         if (index>4){
                             console.log("The next empty tile is in the next guess. The current tile will not change. Press enter to check your answer")
                         }else{
@@ -568,7 +596,7 @@
                         break;
                     case "previous":
                         if (index==0){
-                            console.log("This is the first tile in the guess.")
+                            console.log("This is the first tile in the guess. You can't delete an empty tile")
                         }else{
                             this.currentTile=this.currentGuess.tiles[index-1];
                         }
@@ -647,18 +675,82 @@
             evaluateGuess(userWord){
                 let message ="next guess"
                 // set the current guess to user word. 
-                this.guess = userWord;
-                //If the guess is correct, the game is over. Update tile-states and keyboard data-states. Also update the displays
+                this.currentGuess.guess = userWord;
+
+                // initialize variable that will be used to update row div, and the guess object
+                let dataState ="empty";
+                let dataGuess = this.currentGuess.guess;
+                let divId = "guess"+this.currentGuess.number;
+                let rowDiv = document.getElementById(divId);
+
+                // Check to see if the guess was correct. 
                 if(this.guess == this.winningWord){
-                    message = "mark 77: Game is over. The winning word ";
+                    message = "mark 77: Game is over. ";
                     console.log(message);
+                    dataState="correct";
+                }else{
+                    message = "mark 78: That is not the correct answer ";
+                    console.log(message);
+                    dataState="incorrect";
                 }
-                // Update tile-states and keyboard data-states. Also update the displays
 
-                // If the guess is incorrect, set current guess()
+                //Update the game-row
+                rowDiv.setAttribute("data-state", dataState);
+                rowDiv.setAttribute("data-guess", dataGuess);
 
-                // SetCurrent guess(next)
-                // set the current tile to first tile 
+                //Now update each tile and tile Div
+                this.currentGuess.tiles.forEach(tile=>{
+                    this.evaluateTile(tile)
+                });
+
+                if(dataState == "correct"){
+                    this.endGame(dataState);
+                }else{
+                    this.setCurrentGuess("next");
+                }
+                
+                return;
+            }
+            evaluateTile(tile){
+                // The letter is going to be one of four things: empty, absent, present, or correct. This function will update the tile object and the tile display
+
+                // initialize variable that will be used to update row div, and the guess object
+                let dataState ="tbd";
+                let userWord = this.currentGuess.guess;
+                let divId = "row"+this.currentGuess.number+"tile"+tile.number;
+                let tileDiv = document.getElementById(divId);
+
+                // Determine if the letter is in the winningWord
+                console.log(this.winnningWord.includes(tile.letter));
+
+
+                // if this.letter is an empty string, the the state is empty
+                if(tile.letter ==""){
+                    tile.setState("empty");
+                }else{
+                    
+                    if (this.winnningWord.includes(tile.letter)){
+                        // The letter is in the winning word.
+                        console.log("mark 9: The letter is in the winning word");
+                        // Update the object
+                        tile.setState("present");
+                        
+                        // Now check to see if the letter is in the correct position.
+                        console.log("mark 20: tile.number" + (tile.letter == this.winnningWord.charAt(tile.number -1)));
+                        if (tile.letter == this.winnningWord.charAt(tile.number -1)){
+                            // The letter of this tile is the same as the letter in the winning word
+                            tile.setState("correct");
+                        }                       
+                    }else{
+                        // The letter is not in the winning word
+                        tile.setState("absent");
+
+                    }
+                    dataState=tile.state;
+                    // Update the tile display
+                    tileDiv.setAttribute("data-state", dataState);
+                }
+            return;
             }
 
 
