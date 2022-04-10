@@ -220,7 +220,7 @@
             color: var(--key-evaluated-text-color);
         }
 
-        .message {
+        .message,.result {
             background-color: var(--key-bg-correct);
             color: var(--key-evaluated-text-color);
         }
@@ -259,7 +259,7 @@
     <div id="winning-word"></div>
     <div class="results-container">
         <div class="result" id="result" style="display:none">
-            </div><!-- end results-container -->
+            </div><!-- end result -->
             <div class="btnContainer" id="new-game" style="display:none"></div>
         </div><!-- end results-container -->
         <div class = "message" id="message"></div>
@@ -562,7 +562,7 @@
             endGame(result){
                 // The game is over. Disable the buttons. Send a message to the user. 
                 this.removeButtonEvents();
-                let userMessage ="I am very sorry that you lost the game.";
+                let userMessage ="I am very sorry that you lost the game. The correct word was "+this.winningWord+".";
                 if (result =="correct"){
                     userMessage="Congratulations. You won the game."
                 }

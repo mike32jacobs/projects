@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <title>React Try It - 1</title>
     <style type="text/css">
       .quote {
@@ -21,8 +22,10 @@
     <hr />
     <div id="myapp4"></div>
     <div id="myapp5"></div>
+    <hr />
+    <div id="myapp6"></div>
 
-    <script>
+    <script type="text/babel">
       var quote = React.createElement(
         "p",
         { className: "quote" },
@@ -72,6 +75,8 @@
       ); // end ol
 
       ReactDOM.render(myList2, myapp5);
+      var hello = <h1 id="main">Hello React World!</h1>;
+      ReactDOM.render(hello, myapp6);
     </script>
   </body>
 </html>
