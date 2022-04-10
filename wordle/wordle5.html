@@ -842,9 +842,36 @@
             game1.type(dataKey);
         }
         function newGame(){
-            // This function will clear the 
-            game2 = new Game("anotherGame", "crazy");
-            game2.startGame();
+            // This function will clear the divs, and the data
+            //Get Rid of the keyboard buttons
+            console.log("mark 16");
+
+            let keyboardRows = document.getElementsByClassName("row");
+            console.log("mark 17" +keyboardRows);
+
+            rows =Object.values(keyboardRows);
+            console.log("mark 18" +rows);
+
+            rows.forEach(item=>{
+                    item.innerHTML="";
+                    console.log("mark18");
+                });
+
+            //hide the play again button and the message
+            let btnDiv = document.getElementById("new-game")
+            let messageDiv=document.getElementById("result")
+            messageDiv.style.display = 'none';
+            btnDiv.style.display = 'none';
+
+            // Hide the winning word from the previous game
+            let displayDiv=document.getElementById("winning-word");
+            displayDiv.innerHTML = "";
+
+            game1 = new Game("anotherGame", "crazy");
+            game1.startGame();
+            
+
+
         }
         async function getRandomWord(){
             var words=[];
