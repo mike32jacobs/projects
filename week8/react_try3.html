@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+<title>React Try It - 1</title>
+<style type="text/css">
+	li,a {font-size: 28px}
+	
+</style>
+</head>
+
+<body>
+	<div id="myapp"></div>
+	
+<script>
+var sites = ["Finance", "Weather", "Sports"]
+var myLink =  React.createElement("a", {"href":"https://finance.yahoo.com","target": "_blank"}, "Finance");
+	
+var myList = React.createElement("ol", null,
+	   sites.map((label, i)=>  
+				 React.createElement("li",{key:i},
+					   React.createElement("a", {"href":"#","target": "_blank"}, label
+						  )  //end create a
+						  ) // end create li
+						  ) // end map
+						  ) // end ol 
+ 
+
+
+ReactDOM.render(myList, myapp);	
+</script>	
+</body>
+</html>
+	

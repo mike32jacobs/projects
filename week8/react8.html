@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+<title>React VIII</title>
+
+</head>
+
+<body>
+	<div id="myapp"></div>
+	
+<script>
+function menuItem(label, url)
+{
+	this.label = label;
+	this.url = url;
+}
+menu1= [
+	   new menuItem("Home","./index.html"),
+	   new menuItem("About","./about.html"),
+	   new menuItem("Contact","./contact.html")
+	  ]
+footerMenu =
+	[
+	   new menuItem("Privacy Policy","./privacy_policy.html"),
+	   new menuItem("Careers","./careers.html")
+	]
+
+function navItem(props)
+{
+	return React.createElement("li",null,
+		React.createElement("a",{href:props.url},props.label) )
+}
+	
+function navMenu(props)
+{
+		return React.createElement("ul",{id:props.id},
+			props.items.map((item, i)=>
+				React.createElement(navItem,{key:i, url:item.url, label:item.label},null))
+			);
+}
+
+mainNav = React.createElement(navMenu,{items: menu1, id:"main-nav", key:101},null);
+heading = React.createElement("h3",{key:102},"Footer Menu");
+footerNav = React.createElement(navMenu,{items: footerMenu, id:"footer-nav", key:103},null);
+
+ReactDOM.render([mainNav,heading,footerNav], myapp);
+
+</script>	
+</body>
+</html>
+	

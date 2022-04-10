@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+<title>React V</title>
+<style type="text/css">
+	.green {color: #45B25A;}	
+</style>
+</head>
+
+<body>
+	<div id="myapp"></div>
+	
+<script>
+
+function myPageTitle()
+{
+	return React.createElement("h1",null,"Welcome to My Page");
+}
+//ReactDOM.render(React.createElement(myPageTitle,null,null), myapp);	
+
+function myPageTitle2(props)		// creating a component called myPageTitle2
+{
+	return React.createElement("h1",null,props.title);
+}
+	
+//ReactDOM.render(
+//	React.createElement(myPageTitle2,{title: "Welcome to my better Page"},null), myapp);	
+	
+function myPageTitle3(props)
+{
+	return React.createElement("h1",{className:"green"},props.title);
+}
+//ReactDOM.render(React.createElement(myPageTitle3,{title: "Welcome to my even better Page"},null), myapp);
+	
+function myPageTitle4(props)
+{
+	return React.createElement("h1",{className:props.class},props.title);
+}
+//ReactDOM.render(
+	//React.createElement(myPageTitle4,{title: "Welcome to my really great  Page",class:"green"},null), myapp);
+	
+function myPageTitle4b({title, myclass})
+{
+	return React.createElement("h1",{className: myclass}, title);
+}
+ReactDOM.render(React.createElement(myPageTitle4b,{title: "Welcome to my really great  Page", myclass:"green"},null), myapp);
+	
+class myPageTitle5 extends React.Component {
+	render() {
+		return React.createElement("h1",null,"Welcome to My Page");
+	}
+}
+
+myTitle= React.createElement(myPageTitle5,null,null);
+//ReactDOM.render(myTitle, myapp);
+</script>	
+</body>
+</html>
+	

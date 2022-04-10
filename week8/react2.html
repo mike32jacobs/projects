@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+<title>React II</title>
+<style type="text/css">
+	select,select option {font-size: 16px; }	
+</style>
+</head>
+
+<body>
+	<div id="myapp"></div>
+	
+<script>
+var select = React.createElement("select",{name:"pick_color"},
+						React.createElement("option",null,"Basic"),
+						React.createElement("option",null,"Standard"),
+						React.createElement("option",null,"Premium")
+								 );
+ReactDOM.render(select, myapp);	
+</script>	
+</body>
+</html>
+	

@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+<title>React Try It - 1</title>
+<style type="text/css">
+	li,a {font-size: 28px}
+	
+</style>
+</head>
+
+<body>
+	<div id="myapp"></div>
+	
+<script>
+function ListItem(label, url, isExternal = true)
+{
+	this.label = label;
+	this.url = url;
+	this.external = isExternal;
+}
+	
+var sites = [new ListItem("Finance", "https://yahoo.finance.com"), 
+			 new ListItem("Weather", "https://weather.com"), 
+			 new ListItem("Sports", "https://espn.com")
+			]
+	
+var myList = React.createElement("ol", null,
+	  /* sites.map((item, i)=>  
+				 React.createElement("li",{key:i},
+					   React.createElement("a", 
+										   {"href": item.url,
+											   "target": this.external: "_blank" ? "_self"},
+										   item.label
+						  )  //end create a
+						  ) // end create li
+						  ) // end map
+						  ) // end ol 
+						 */
+
+		sites.map((item, i)=>  {
+		         var target;
+				 if (this.external)
+					 target = "_blank";
+				 else
+					 target = "_self";
+				 React.createElement("li",{key:i},
+					   React.createElement("a", 
+										   {"href": item.url,
+											   "target": target},
+										   item.label
+						  )  //end create a
+						  ) // end create li
+		}
+						  ) // end map
+						  ) // end ol 
+ 
+
+
+ReactDOM.render(myList, myapp);	
+</script>	
+</body>
+</html>
+	

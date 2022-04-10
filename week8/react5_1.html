@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://unpkg.com/react@16.7.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.7.0/umd/react-dom.development.js"></script>
+<title>React V</title>
+<style type="text/css">
+	select,select option {font-size: 16px; }	
+</style>
+</head>
+
+<body>
+	<div id="myapp"></div>
+	
+<script>
+function Level(name, code)
+{
+	this.name = name;
+	this.code = code;
+}
+options = [new Level("Basic","base"), 
+		   new Level("Standard","std"), 
+		   new Level("Premium","prem")];
+
+function mySelect()
+{
+	return React.createElement("select",{name:"pick"},
+					options.map((item, i)=>React.createElement("option",{key:i,value:item.code},item.name))
+								 );
+}
+select = React.createElement(mySelect,null,null);
+ReactDOM.render(select, myapp);	
+</script>	
+</body>
+</html>
+	
