@@ -16,20 +16,34 @@
   </head>
 
   <body>
+    <h1>myapp</h1>
     <div id="myapp"></div>
     <div id="myapp2"></div>
     <div id="myapp3"></div>
     <hr />
+    <h1>myapp4-5</h1>
+
     <div id="myapp4"></div>
     <div id="myapp5"></div>
     <hr />
+    <h1>myapp6</h1>
     <div id="myapp6"></div>
+    <hr />
+    <h1>myapp7-9</h1>
+    <div id="myapp7"></div>
+    <div id="myapp8"></div>
+    <div id="myapp9"></div>
+    <hr />
+    <h1>myapp10-12</h1>
+    <div id="myapp10"></div>
+    <div id="myapp11"></div>
+    <div id="myapp12"></div>
 
     <script type="text/babel">
       var quote = React.createElement(
         "p",
         { className: "quote" },
-        "Four score and sevem years ago"
+        "Four score and seven years ago"
       );
 
       ReactDOM.render(quote, myapp);
@@ -61,6 +75,12 @@
       ReactDOM.render(myLink, myapp4);
 
       var sites = ["Finance", "Weather", "Sports"];
+      var urls = [
+        "https://finance.yahoo.com",
+        "https://www.weather.gov/",
+        "https://fivethirtyeight.com/",
+      ];
+
       var myList2 = React.createElement(
         "ol",
         null,
@@ -75,8 +95,92 @@
       ); // end ol
 
       ReactDOM.render(myList2, myapp5);
+
       var hello = <h1 id="main">Hello React World!</h1>;
       ReactDOM.render(hello, myapp6);
+
+      var list3 = (
+        <ol>
+          <li>
+            <a href="https://finance.yahoo.com" target="_blank">
+              Finance
+            </a>
+          </li>
+          <li>Weather</li>
+          <li>Sports</li>
+        </ol>
+      );
+
+      var options = ["basic", "standard", "premium", "super premium"];
+      var select = (
+        <select name="level">
+          {options.map((val, i) => (
+            <option key={i}>{val}</option>
+          ))}
+        </select>
+      );
+      ReactDOM.render(select, myapp8);
+
+      ReactDOM.render(list3, myapp7);
+
+      var list6 = (
+        <ol>
+          {sites.map((val, i) => (
+            <li>
+              <a href={urls[i]} target="_blank">
+                go to {val}
+              </a>
+            </li>
+          ))}
+        </ol>
+      );
+      ReactDOM.render(list6, myapp9);
+
+      function Site(name, url) {
+        this.name = name;
+        this.url = url;
+      }
+      sites = [
+        new Site("Finance", "https://finance.yahoo.com"),
+        new Site("Weather", "https://www.weather.gov/"),
+        new Site("Sports", "https://fivethirtyeight.com/"),
+      ];
+      var names = ["Finance", "Weather", "Sports"];
+      var urls = [
+        "https://finance.yahoo.com",
+        "https://www.weather.gov/",
+        "https://fivethirtyeight.com/",
+      ];
+
+      var list10 = (
+        <ol>
+          {sites.map((site, i) => (
+            <li>
+              <a href={site.url} target="_blank">
+                go to {site.name}
+              </a>
+            </li>
+          ))}
+        </ol>
+      );
+      ReactDOM.render(list10, myapp10);
+
+      function SiteList(props) {
+        return (
+          <ol>
+            {props.sites.map((site, i) => (
+              <li>
+                <a href={site.url} target="_blank">
+                  go to {site.name}
+                </a>
+              </li>
+            ))}
+          </ol>
+        );
+      }
+      var mySites = <SiteList site={sites}></SiteList>;
+
+      ReactDOM.render(mySites, myapp11);
     </script>
   </body>
 </html>
