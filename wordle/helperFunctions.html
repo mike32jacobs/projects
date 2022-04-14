@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test out a function</title>
+  </head>
+  <body>
+    <h1>This is a way to test the output of a function</h1>
+    <div id="word"></div>
+    <script>
+      function countCharacters() {
+        let word = "bbbss";
+
+        /*// Now check to see if the letter is in the correct position.
+                console.log("mark 20: tile.number" + (tile.letter == this.winningWord.charAt(tile.number -1)));
+                if (tile.letter == this.winningWord.charAt(tile.number -1)){
+                    // The letter of this tile is the same as the letter in the winning word
+                    tile.set
+                    State("correct");
+                }  */
+
+        var multiples = [];
+        // iterate through the word
+        for (var i = 0; i < word.length; i++) {
+          let letter = word[i];
+          var count = [...word].filter((x) => x === word[i]).length;
+          console.log(count);
+          console.info(word[i] + ": " + count);
+          if (count > 1 && multiples.includes(word[i]) == false) {
+            multiples.push(word[i]);
+          }
+        }
+        console.log("multiples: " + multiples);
+      }
+      countCharacters();
+    </script>
+  </body>
+</html>

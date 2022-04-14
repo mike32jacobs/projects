@@ -232,7 +232,7 @@
         <div class="container">
 
         <div class="jumbotron">
-            <h1 class="title"> Wordle</h1>
+            <h1 class="title"> Wordle (Under Development)</h1>
             <p>Assignment #4 By Michael Jacobs</p>
             <p>THIS IS VERSION 6:</p>
             <p>This is an assignment for E-28</p>        
@@ -265,7 +265,9 @@
         <div class = "message" id="message"></div>
 
     <script>
-        // var winningWord="crazy"
+        // This is a global variable
+        var winningWordsArray=[]; 
+        
         /* Tile Class  **************************************************** */
         class Tile{
             constructor(letter="", number=0){
@@ -446,6 +448,7 @@
             constructor(name, winningWord = "wordl") {
                 this.name=name;
                 this.winningWord=winningWord; 
+                this.randomWords=[];
                 this.guesses = [];
                 this.keyboard = null;
                 this.gameOver = false;
@@ -534,10 +537,32 @@
 
             }
             async getWinningWord(){
-                let randomWords= await getRandomWord();
-                return randomWords[Math.floor(Math.random()*randomWords.length)]
+                // If this is the first time, then call the API to get the randomWords array, and return the first value in the array
+                if (winningWordsArray.length === 0) { 
+                    console.log("Mark 387: winningWordsArray is empty!")
+                    this.randomWords= await getRandomWords();
+                    winningWordsArray=this.randomWords;
+                    console.log("Mark 350: this.randomWords"+ this.randomWords);
+
+                    return this.randomWords[0];
+                }else{
+                    console.log("Mark 388: Array is not empty!")
+                    console.log("Mark 400: this.winningWord!"+ this.winningWord);
+
+                    this.randomWords = winningWordsArray;
+                    var currentIndex = winningWordsArray.indexOf(this.winningWord);
+                    var nextIndex = (currentIndex + 1) % this.randomWords.length;
+                    return this.randomWords[nextIndex];
+                }
+
+
+                // return this.randomWords[Math.floor(Math.random()*this.randomWords.length)]
+
             }
             async setWinningWord(){
+                // Check to see if the global variable is empty
+                console.log("Mark 0002: winningWordsArray"+winningWordsArray);
+
                 this.winningWord = await this.getWinningWord()
                 console.log("mark 99: this.winningWord"+ this.winningWord)
                 window.winningWord=this.winningWord;
@@ -874,7 +899,7 @@
 
 
         }
-        async function getRandomWord(){
+        async function getRandomWords(){
             var words=[];
             const options = {
                 method: 'GET',
