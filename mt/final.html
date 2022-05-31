@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Code Test</title>
+    <style type="text/css">
+      .quote {
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Final Exam 2</h1>
+    <img
+      src="https://img.freepik.com/free-psd/superhero-text-effect_17005-1370.jpg?w=900&t=st=1652516108~exp=1652516708~hmac=ef41c520d5cd6369c571b167638b35b8b6c955e4b8062ef4c9b4696f8cb9b870"
+      alt="W3Schools.com"
+      style="width: 25%"
+    />
+    <div>Hello. This is a place to try out some code snippets</div>
+    <p>These are places to run code for the final quiz</p>
+    <div id="student_report"></div>
+    <div id="pick"></div>
+    <script>
+        var s = "apple pear orange strawberry banana";
+        const myArray = s.split(myFunction);
+        function myFunction(word) {
+          return;
+          `<option value=${word}>${word}</option>`;
+        }
+        console.log("s" + s);
+        console.log("myArray" + myArray);
+      //   const newArray = myArray.map(myFunction);
+            var select =
+        {
+          myArray.map((level, i) => (
+            <option key={i} value={level.code}>
+              {level.name}
+            </option>
+          ));
+        }
+        console.log("newArray" + newArray);
+
+        document.getElementById("pick").innerHTML = select;
+
+        // function Level(name, code)
+        // {
+        // this.name = name;
+        // this.code = code;
+        // }
+        // var options = [new Level("Basic","base"), new Level("Standard","std"),
+        // new Level("Premium","prem")];
+        // var select = <select name='level'>
+        // {
+        // options.map((level, i) =>
+        // <option key={i} value={level.code}>{level.name}</option>)
+        // }
+        // </select>
+        // ReactDOM.render(select, myapp);
+
+        // (3 pts) Use the array method map() to return an array of each element wrapped in an <option> tag
+
+        // (3 pts) Use the array to place a select form element within the <div>
+
+        //   Note- you should not create any additional form elements or the form tag
+    </script>
+  </body>
+</html>

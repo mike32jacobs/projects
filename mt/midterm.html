@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Code Test</title>
+    <style type="text/css">
+      .quote {
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>Hello. This is a place to try out some code snippets</div>
+    <p>This is where we see the student output</p>
+    <div id="student_report"></div>
+    <script>
+      function Student(name = "testStudent", grades = []) {
+        this.name = name;
+        this.grades = grades;
+        this.gradeAverage = gradeAverage;
+        this.show = show;
+      }
+      function gradeAverage() {
+        //Find the length of the grades array. Iterate through it. Add each grade and divide by the total number of grades.
+        console.log("Mark 22: In the Grade Average method");
+        numGrades = this.grades.length;
+        console.log("numGrades: " + numGrades);
+        // reduced = reduce(this.grades);
+        // console.log(reduced);
+        gradeSum = 0;
+        for (item in this.grades) {
+          gradeSum += this.grades[item];
+        }
+
+        //calculate average
+        avg = gradeSum / numGrades;
+
+        console.log("gradeSum: " + gradeSum);
+        console.log("numGrades: " + numGrades);
+        console.log("avg: " + avg);
+        return avg;
+      }
+      function show() {
+        showString =
+          "The student: " +
+          this.name +
+          " has a grade average of: " +
+          this.gradeAverage();
+
+        return showString;
+      }
+      s1 = new Student("Mike", [80, 90, 40]);
+      s2 = new Student("Kara", [75, 90, 45]);
+      s3 = new Student("Matt", [80, 90, 100]);
+
+      console.log("s1.grades" + s1.grades);
+      console.log("s1.name: " + s1.name);
+      console.log("s1.show: " + s1.show());
+      s1.gradeAverage();
+      alert(s1.show());
+      students = [s1, s2, s3];
+      let displayDiv = document.getElementById("student_report");
+      for (let i = 0; i < 2; i++) {
+        displayDiv.innerHTML += students[i].show();
+      }
+    </script>
+  </body>
+</html>
