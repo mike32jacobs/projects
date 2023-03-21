@@ -1,0 +1,136 @@
+{
+	"Diamondbacks": {
+		"primary": "#A71930",
+		"secondary": "#E3D4AD",
+		"tertiary": "#000000",
+		"quaternary": "#FFFFFF"
+	},
+	"Braves": {
+		"primary": "#CE1141",
+		"secondary": "#13274F"
+	},
+	"Orioles": {
+		"primary": "#DF4601",
+		"secondary": "#000000"
+	},
+	"Red Sox": {
+		"primary": "#BD3039",
+		"secondary": "#0C2340"
+	},
+	"Cubs": {
+		"primary": "#0E3386",
+		"secondary": "#CC3433"
+	},
+	"White Sox": {
+		"primary": "#000000",
+		"secondary": "#C4CED4"
+	},
+	"Reds": {
+		"primary": "#C6011F",
+		"secondary": "#000000"
+	},
+	"Indians": {
+		"primary": "#0C2340",
+		"secondary": "#E31937",
+		"tertiary": "#1C2841"
+	},
+	"Rockies": {
+		"primary": "#33006F",
+		"secondary": "#C4CED4",
+		"tertiary": "#231F20"
+	},
+	"Tigers": {
+		"primary": "#0C2340",
+		"secondary": "#FA4616"
+	},
+	"Astros": {
+		"primary": "#EB6E1F",
+		"secondary": "#002D62"
+	},
+	"Royals": {
+		"primary": "#174884",
+		"secondary": "#C09A5B"
+	},
+	"Angels": {
+		"primary": "#BA0021",
+		"secondary": "#003263"
+	},
+	"Dodgers": {
+		"primary": "#005A9C",
+		"secondary": "#EF3E42"
+	},
+	"Marlins": {
+		"primary": "#00A3E0",
+		"secondary": "#EF3E42",
+		"tertiary": "#F0A133",
+		"quaternary": "#000000"
+	},
+	"Brewers": {
+		"primary": "#0A2351",
+		"secondary": "#B6922E"
+	},
+	"Twins": {
+		"primary": "#0C2340",
+		"secondary": "#BA0C2F"
+	},
+	"Mets": {
+		"primary": "#002D72",
+		"secondary": "#FF5910"
+	},
+	"Yankees": {
+		"primary": "#0C2340",
+		"secondary": "#C4CED4"
+	},
+	"Athletics": {
+		"primary": "#003831",
+		"secondary": "#EFB21E"
+	},
+	"Phillies": {
+		"primary": "#E81828",
+		"secondary": "#002D72"
+	},
+	"Pirates": {
+		"primary": "#27251F",
+		"secondary": "#FDB827"
+	},
+	"Padres": {
+		"primary": "#2F241D",
+		"secondary": "#0072C6",
+		"tertiary": "#A2AAAD",
+		"quaternary": "#FFC425"
+	},
+	"Giants": {
+		"primary": "#FD5A1E",
+		"secondary": "#27251F",
+		"tertiary": "#8B6F4E",
+		"quaternary": "#FFFFFF"
+	},
+	"Mariners": {
+		"primary": "#0C2C56",
+		"secondary": "#C4CED4",
+		"tertiary": "#005C5C"
+	},
+	"Cardinals": {
+		"primary": "#C41E3A",
+		"secondary": "#0C2340",
+		"tertiary": "#FEDB00"
+	},
+	"Rays": {
+		"primary": "#8FBCE6",
+		"secondary": "#092C5C",
+		"tertiary": "#F5D130"
+	},
+	"Rangers": {
+		"primary": "#C0111F",
+		"secondary": "#003278",
+		"tertiary": "#0C2C56"
+	},
+	"Blue Jays": {
+		"primary": "#134A8E",
+		"secondary": "#1D2D5C"
+	},
+	"Nationals": {
+		"primary": "#AB0003",
+		"secondary": "#14225A"
+	}
+}

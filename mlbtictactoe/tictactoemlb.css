@@ -1,0 +1,159 @@
+:root {
+	--white: #ffffff;
+	--black: #000000;
+	--color1: #174885;
+	--color2: #c0995a;
+	--color3: #7bb2dd;
+	--color4: var(--white);
+	--color5: var(--black);
+}
+.container {
+	display: flex;
+	flex-direction: column;
+	max-height: 100vh;
+	min-height: 90vh;
+	text-align: center;
+	font-size: 2em;
+}
+
+.gameboard {
+	width: 100%;
+	flex-grow: 10;
+	display: grid;
+	grid-template-columns: 0.5fr 2fr 0.5fr;
+	grid-template-rows: 0.4fr 2.4fr 0.4fr;
+	/* grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr; */
+
+	gap: 5px 0px;
+	grid-auto-flow: row;
+	grid-area: gameboard;
+	background-color: white;
+	border-radius: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.message {
+	grid-area: 1 / 2 / 2 / 3;
+	text-align: center;
+}
+.message[data-state="X"] {
+	background-color: var(--color1);
+	color: white;
+	border: 2px solid var(--color1);
+}
+.message[data-state="O"] {
+	background-color: var(--color2);
+	color: white;
+	border: 2px solid var(--color2);
+}
+.message[data-state="Draw"] {
+	background-color: white;
+	color: var(--color1);
+	border: 2px solid var(--color1);
+}
+
+.playagain {
+	grid-area: 3 / 2 / 4 / 3;
+	font-size: 2em;
+	background-color: white;
+	color: var(--color1);
+	border: 2px solid var(--color1);
+}
+.playagain:hover {
+	background-color: var(--color2);
+	color: white;
+	border: 2px solid var(--color1);
+}
+.playagain:active {
+	box-shadow: 0 5px #666;
+	transform: translateY(4px);
+	opacity: 0.3;
+	transition: all 0.8s;
+}
+.playagain:active:after {
+	opacity: 1;
+	transition: 0s;
+}
+
+.squaresContainer {
+	display: grid;
+	gap: 0px 0px;
+	grid-auto-flow: row;
+	grid-area: 2 / 2 / 3 / 3;
+	width: 100%;
+	height: 100%;
+}
+
+/* .subtitle {
+	grid-area: 1 / 2 / 2 / 3;
+} */
+
+.header {
+	width: 100%;
+	flex-grow: 1;
+	grid-area: header;
+	border-radius: 4px;
+	background-color: var(--color1);
+	color: var(--color4);
+}
+
+.footer {
+	width: 100%;
+	flex-grow: 1;
+	grid-area: footer;
+	border-radius: 4px;
+	background-color: var(--color1);
+	color: var(--color4);
+}
+.header,
+.footer {
+	text-align: center;
+}
+#squaresContainer {
+	display: grid;
+	grid-gap: 20px;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(3, 1fr);
+}
+.square {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2em;
+	color: var(--color4);
+	border-radius: 4px;
+	padding: 10px;
+	/* border: 2px solid black; */
+}
+
+.square[data-state="X"] {
+	background-color: var(--color1);
+}
+.square[data-state="O"] {
+	background-color: var(--color2);
+}
+.square[data-state="OPEN"] {
+	background-color: var(--color3);
+}
+.square[data-state="OPEN"]:hover {
+	background-color: var(--color4);
+}
+
+label {
+	/* background-color: var(--color1); */
+	color: var(--color4);
+}
+input[select] {
+	background-color: #7bb2dd;
+	size: 20px;
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+	.container {
+		font-size: 1em;
+	}
+}
