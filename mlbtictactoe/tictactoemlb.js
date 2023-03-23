@@ -258,6 +258,7 @@ function buildDropdown() {
 	ddLabel.setAttribute("for", "teamSelect");
 	ddLabel.innerHTML = "Choose a team to change your theme. ";
 	ddElement.id = "teamSelect";
+	ddelement.setAttribute("size", "15");
 	// put the select on the dom
 	dropDownDiv.appendChild(ddLabel);
 	dropDownDiv.appendChild(ddElement);

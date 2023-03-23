@@ -146,9 +146,10 @@ label {
 	/* background-color: var(--color1); */
 	color: var(--color4);
 }
-input[select] {
+input[type="select"] {
 	background-color: #7bb2dd;
 	size: 20px;
+	color: aquamarine;
 }
 
 /* Extra small devices (phones, 600px and down) */
