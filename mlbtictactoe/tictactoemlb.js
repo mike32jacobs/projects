@@ -347,6 +347,7 @@ function displayNextPlayer() {
 		messageDiv.setAttribute("data-state", playerTurn);
 		displayMessage("Player " + playerTurn + " is up.");
 	} else {
+		// Game is over
 		messageDiv.setAttribute("data-state", winner);
 		winner == "Draw"
 			? displayMessage("Draw")
@@ -383,11 +384,24 @@ function checkForWinner() {
 		console.log("mark 13");
 		gameOn = false;
 		winner = "X";
+		//Disable the open squares
+		for (let i = 0; i < 9; i++) {
+			if (squares[i].getAttribute("data-state")=="OPEN"){
+				squares[i].classList.add("disabled");
+			};
+		}	
+		
 	} else if (winningCombos.includes("OOO")) {
 		// O is the winner
 		console.log("mark 14");
 		gameOn = false;
 		winner = "O";
+		//Disable the open squares
+		for (let i = 0; i < 9; i++) {
+			if (squares[i].getAttribute("data-state")=="OPEN"){
+				squares[i].classList.add("disabled");
+			};
+		}
 	} else {
 		// No Winner. The game is still on or it is a draw
 		console.log("mark 15");

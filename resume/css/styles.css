@@ -646,15 +646,24 @@ progress {
   .container-sm, .container {
     max-width: 540px;
   }
+  .card-container {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
 }
 @media (min-width: 768px) {
   .container-md, .container-sm, .container {
     max-width: 720px;
   }
+  .card-container {
+    grid-template-columns: repeat(auto-fit, minmax(50%, 1fr));
+  }
 }
 @media (min-width: 992px) {
   .container-lg, .container-md, .container-sm, .container {
     max-width: 960px;
+  }
+  .card-container {
+    grid-template-columns: repeat(auto-fit, minmax(35%, 1fr));
   }
 }
 @media (min-width: 1200px) {
@@ -11435,7 +11444,7 @@ section.resume-section .resume-section-content {
   }
 }
 
-/* Tese experiements with new Grid for Cards */
+/* These experiements with new Grid for Cards */
 .card-container {
     display: grid;
     grid-gap: 5px;
@@ -11444,6 +11453,8 @@ section.resume-section .resume-section-content {
     /* grid-auto-rows: 100px; */
 
 }
+
+/* Change the container for different screen sizes */
 
 .card-container2 {
     border: 1px solid black;

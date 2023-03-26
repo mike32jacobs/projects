@@ -149,11 +149,17 @@ label {
 	/* background-color: var(--color1); */
 	color: var(--color4);
 }
-/* input[type="select"] {
-	background-color: #7bb2dd;
-	size: 20px;
-	color: aquamarine;
-} */
+input[type="select"] {
+	/* background-color: #7bb2dd; */
+	/* size: 20px; */
+	color: var(--color1);
+}
+
+.disabled {
+	pointer-events: none;
+	background-color: var(--color3);
+	border: 2px solid var(--color4);
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
