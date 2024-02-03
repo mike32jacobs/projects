@@ -249,7 +249,6 @@
             <div class="row" id="row0"></div>
             <div class="row" id="row1"></div>
             <div class="row" id="row2"></div>
-
         </div><!-- end keyboard -->
     </div><!-- end keyboard-container -->
     </div> <!-- End game-->
@@ -818,14 +817,21 @@
                 let tileDiv = document.getElementById(divId);
 
                 // Determine if the letter is in the winningWord
-                console.log(this.winningWord.includes(tile.letter));
+                console.log("mark 25"+this.winningWord.includes(tile.letter));
+                // How many times is the letter in the winning word.
+                let letterCount = this.winningWord.split(tile.letter).length - 1;
+                console.log("mark 26: "+tile.letter+" is in the winning word " + letterCount+" times.");
 
 
                 // if this.letter is an empty string, the the state is empty
                 if(tile.letter ==""){
                     tile.setState("empty");
                 }else{
-                    
+                    // Present Correct
+
+                    // Present Incorrect
+
+                    // Absent 
                     if (this.winningWord.includes(tile.letter)){
                         // The letter is in the winning word.
                         console.log("mark 9: The letter is in the winning word");
@@ -900,24 +906,25 @@
 
         }
         async function getRandomWords(){
-            var words=[];
-            const options = {
-                method: 'GET',
-                headers: {
-                    'X-RapidAPI-Host': 'random-words5.p.rapidapi.com',
-                    'X-RapidAPI-Key': 'e5cfbfa955msh7a91b25079074c5p1f0709jsn4a938e9d07cc'
-                }
-            };
+            // var words=[];
+            // const options = {
+            //     method: 'GET',
+            //     headers: {
+            //         'X-RapidAPI-Host': 'random-words5.p.rapidapi.com',
+            //         'X-RapidAPI-Key': 'e5cfbfa955msh7a91b25079074c5p1f0709jsn4a938e9d07cc'
+            //     }
+            // };
 
-            await fetch('https://random-words5.p.rapidapi.com/getMultipleRandom?count=20&wordLength=5', options)
-                .then(response => response.json())
-                .then(response => {
-                    console.log(response)
-                    words = response;
+            // await fetch('https://random-words5.p.rapidapi.com/getMultipleRandom?count=20&wordLength=5', options)
+            //     .then(response => response.json())
+            //     .then(response => {
+            //         console.log(response)
+            //         words = response;
 
-                })
-                .catch(err => console.error(err));
-                return words;
+            //     })
+            //     .catch(err => console.error(err));
+            //     return words;
+            return ["dread", "bomb", "ether"];
         }
         async function isWord(userWord){
         /* API **************************************************** */
